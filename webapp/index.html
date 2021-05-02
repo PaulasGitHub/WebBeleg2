@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kapau's Adviz</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="projectTitle">
+    <h1>KaPau's Adviz</h1>
+</div>
+<!--LogIn-Screen-->
+<div class="login">
+    <h2>Login</h2><br>
+    <ul>
+        <li>
+            <label id="usernameLabel" for="usernameInput">Username:</label>
+            <input type="text" id="usernameInput" name="username" placeholder="Maxim Musterfrau" required>
+        </li>
+        <li>
+            <label id="passwordLabel">Password:</label>
+            <input type="password" id="passwordInput" name="password" required>
+        </li>
+    </ul>
+    <button class="login" type="login">Log in</button>
+</div>
+<br/><br/>
+<!--Main Screen-->
+<div class="map">
+    <h2>Map</h2>
+    <div class="row">
+        <div class="column">
+            <p>Karl Schulz<br>
+                Carl-Herz-Ufer 25<br>
+                10961 Berlin<br>
+                Germany
+            </p>
+            <p>Maxime Musterfrau<br>
+                Pfarrstraße 113<br>
+                10317 Berlin<br>
+                Germany
+            </p>
+            <p>Jo Günter<br>
+                Tempelherrenstraße 13<br>
+                10961 Berlin<br>
+                Germany
+            </p>
+        </div>
+        <div class="column">
+            <iframe id="MapOSM" width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+                    src="https://www.openstreetmap.org/export/embed.html?bbox=13.36014747619629%2C52.50331788014253%2C13.440485000610353%2C52.53961418106945&amp;layer=mapnik"></iframe>
+        </div>
+    </div>
+    <br>
+    <div class="contact_buttons">
+        <button class="myContacts" type="myContacts">My Contacts</button>
+        <button class="allContacts" type="allContacts">All Contacts</button>
+        <button class="addContact" type="addContact">Add Contact</button>
+    </div>
+</div>
+<br/><br/>
+<!--Add-Contact-Screen-->
+<div class="addcontact_form">
+    <h2>Add Contact</h2>
+    <ul>
+        <li>
+            <label id="firstnameLabelAddForm">First name:</label>
+            <input type="text" id="firstnameInputAddForm" name="firstname" placeholder="Maxim" required>
+        </li>
+        <li>
+            <label id="lastnameLabelAddForm">Last name:</label>
+            <input type="text" id="lastnameInputAddForm" name="lastname" placeholder="Musterfrau" required>
+        </li>
+        <li>
+            <label id="streetLabelAddForm">Street & Number:</label>
+            <input type="text" id="streetInputAddForm" name="street" placeholder="Sonnenallee" required>
+            <input type="number" id="numberInputAddForm" name="number" placeholder="12" required>
+        </li>
+        <li>
+            <label id="zipLabelAddForm">ZIP:</label>
+            <input type="text" id="zipInputAddForm" name="zip" placeholder="12345" required>
+        </li>
+        <li>
+            <label id="cityLabelAddForm">City:</label>
+            <input type="text" id="cityInputAddForm" name="city" placeholder="Berlin" required>
+        </li>
+        <li>
+            <label id="stateLabelAddForm">State:</label>
+            <input type="text" id="stateInputAddForm" name="state" placeholder="Berlin">
+        </li>
+        <li>
+            <label id="countryLabelAddForm">Country:</label>
+            <input type="text" id="countryInputAddForm" name="country" placeholder="Deutschland">
+        </li>
+        <li>
+            <label id="privateLabelAddForm">private</label>
+            <input type="checkbox" id="privateCheckAddForm" name="private" checked>
+            <span class="private_hint">Unchecking this box makes the contact public.</span>
+        </li>
+        <li>
+            <label id="ownerLabelAddForm">Owner:</label>
+            <select name="owner">
+                <option selected>self</option>
+                <option>normalo</option>
+            </select>
+        </li>
+    </ul>
+    <button class="save" type="save">Save</button>
+</div>
+<br/><br/>
+<!--Add-Contact-Screen-->
+<div class="updatecontact_form">
+    <h2>Delete/Update Contact</h2>
+    <ul>
+        <li>
+            <label id="firstnameLabelUpdateForm">First name:</label>
+            <input type="text" id="firstnameInputUpdateForm" name="firstname" value="Bob" required>
+        </li>
+        <li>
+            <label id="lastnameLabelUpdateForm">Last name:</label>
+            <input type="text" id="lastnameInputUpdateForm" name="lastname" value="Brown" required>
+        </li>
+        <li>
+            <label id="streetLabelUpdateForm">Street & Number:</label>
+            <input type="text" id="streetInputUpdateForm" name="street" value="Berliner Straße" required>
+            <input type="number" id="numberInputUpdateForm" name="number" value="22" required>
+        </li>
+        <li>
+            <label id="zipLabelUpdateForm">ZIP:</label>
+            <input type="text" id="zipInputUpdateForm" name="zip" value="10715" required>
+        </li>
+        <li>
+            <label id="cityLabelUpdateForm">City:</label>
+            <input type="text" id="cityInputUpdateForm" name="city" value="Berlin" required>
+        </li>
+        <li>
+            <label id="stateLabelUpdateForm">State:</label>
+            <input type="text" id="stateInputUpdateForm" name="state" value="Berlin">
+        </li>
+        <li>
+            <label id="countryLabelUpdateForm">Country:</label>
+            <input type="text" id="countryInputUpdateForm" name="country" value="Germany">
+        </li>
+        <li>
+            <label id="privateLabelUpdateForm">private</label>
+            <input type="checkbox" id="privateCheckUpdateForm" name="private" checked>
+            <span class="private_hint">Unchecking this box makes the contact public.</span>
+        </li>
+        <li>
+            <label id="ownerLabelUpdateForm">Owner:</label>
+            <select name="owner">
+                <option>self</option>
+                <option selected>normalo</option>
+            </select>
+        </li>
+        <li>
+            <button id="updateButtonUpdateForm">Update</button>
+            <button id="deleteButtonUpdateForm">Delete</button>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

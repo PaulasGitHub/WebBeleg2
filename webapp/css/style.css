@@ -1,0 +1,114 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.projectTitle {
+    font-size: 30px;
+    text-align: center;
+    border: 2px solid #5990a0;
+    border-radius: 20px;
+    width: 800px;
+    margin: auto;
+
+    color: whitesmoke;
+    background-color: #5990a0;
+}
+
+ul {
+    width: 750px;
+    list-style-type: none;
+    list-style-position: outside;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    padding: 5px;
+    position: relative;
+}
+
+label {
+    width: 150px;
+    margin-top: 3px;
+    display: inline-block;
+    float: left;
+    padding: 3px;
+}
+
+input {
+    height: 20px;
+    width: 150px;
+    padding: 5px 8px;
+    margin: 2px;
+}
+
+.column {
+    float: left;
+    width: 10%;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+button {
+    background-color: whitesmoke;
+    border: 1px solid #5990a0;
+    padding: 10px 24px;
+
+    cursor: pointer;
+    float: inside;
+}
+
+button:hover {
+    background-color: cadetblue;
+}
+
+input[type = number] {
+    width: 50px;
+}
+
+.checkbox input {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    display: table;
+}
+
+span {
+    font-weight: normal;
+    font-style: italic;
+    font-size: 15px;
+    color: #5990a0;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+select {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    border: none;
+
+    width: 100px;
+    height: 30px;
+    -moz-padding-start: calc(10px - 3px);
+    padding-left: 10px;
+
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+
+    box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+}
+
+select:focus::-ms-value {
+    background-color: transparent;
+}
+
+select::-ms-expand {
+    display: none;
+}
