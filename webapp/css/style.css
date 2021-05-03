@@ -70,10 +70,8 @@ input[type = number] {
     width: 50px;
 }
 
-.checkbox input {
-    margin-top: 5px;
-    margin-bottom: 10px;
-    display: table;
+input[type=checkbox] {
+    cursor: pointer;
 }
 
 span {
