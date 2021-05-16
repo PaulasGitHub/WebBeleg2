@@ -1,3 +1,8 @@
+const users = [
+    {name: "admina", password: "pass123"},
+    {name: "normalo", password: "pass321"}
+]
+
 function showLoginContent() {
     let loginDiv = document.getElementById("login");
     let mainContentDiv = document.getElementById("mainContent")
@@ -5,9 +10,16 @@ function showLoginContent() {
     mainContentDiv.style.display = 'none'
 }
 
-function showLoggedInContent() {
-    let loginDiv = document.getElementById("login");
-    let mainContentDiv = document.getElementById("mainContent")
-    loginDiv.style.display = 'none'
-    mainContentDiv.style.display = 'block'
+function login() {
+    let givenUsername = document.getElementById('usernameInput').value
+    let givenPassword = document.getElementById('passwordInput').value
+    
+    users.forEach(function (item) {
+        if (item.name === givenUsername && item.password === givenPassword) {
+            let loginDiv = document.getElementById("login");
+            let mainContentDiv = document.getElementById("mainContent")
+            loginDiv.style.display = 'none'
+            mainContentDiv.style.display = 'block'
+        }
+    });
 }
