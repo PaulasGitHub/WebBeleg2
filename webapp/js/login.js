@@ -4,10 +4,8 @@ const users = [
 ]
 
 function logout() {
-    let loginDiv = document.getElementById("login");
-    let mainContentDiv = document.getElementById("mainContent")
-    loginDiv.style.display = 'block'
-    mainContentDiv.style.display = 'none'
+    document.getElementById("login").style.display = 'block'
+    document.getElementById("mainContent").style.display = 'none'
 }
 
 function login() {
