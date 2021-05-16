@@ -56,10 +56,13 @@ const users = [
         ]
     }
 ]
+let loggedInUser
 
 function logout() {
     document.getElementById("login").style.display = 'block'
     document.getElementById("mainContent").style.display = 'none'
+
+    document.getElementById('contactsDiv').innerHTML = "";
 }
 
 function login() {
@@ -75,6 +78,8 @@ function login() {
             document.getElementById("mainContent").style.display = 'block'
             document.getElementById('welcomeHeader').innerHTML = "Welcome " + givenUsername + "!"
             document.getElementById('errorMessageLogin').innerHTML = ''
+            loggedInUser = currentUser;
+            displayContacts()
             userNotFound = false
         }
         currentUserIndex++
@@ -82,5 +87,23 @@ function login() {
     if (userNotFound) document.getElementById('errorMessageLogin').innerHTML = "Login credentials where incorrect! Please try again!"
     document.getElementById('usernameInput').value = null;
     document.getElementById('passwordInput').value = null;
+}
 
+function displayContacts() {
+    let contactsDiv = document.getElementById('contactsDiv')
+    loggedInUser
+    loggedInUser.contacts.forEach(function (contact) {
+        let contactList = document.createElement('UL')
+        for (var propertyName in contact) {
+            addContactListElement(contactList, contact[propertyName])
+        }
+        contactsDiv.appendChild(contactList)
+    });
+}
+
+function addContactListElement(contactList, contactAttribute) {
+    let listElement = document.createElement("LI");          // Create a <li> node
+    let listElementText = document.createTextNode(contactAttribute);         // Create a text node
+    listElement.appendChild(listElementText);
+    contactList.appendChild(listElement)
 }
