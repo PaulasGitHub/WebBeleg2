@@ -1,6 +1,60 @@
 const users = [
-    {name: "admina", password: "pass123"},
-    {name: "normalo", password: "pass321"}
+    {
+        name: 'admina',
+        password: 'pass123',
+        contacts: [
+            {
+                firstName: 'Maxime',
+                lastName: 'Musterfrau',
+                street: 'Sonnenalle',
+                number: 12,
+                zip: 12345,
+                city: 'Berlin',
+                state: 'Berlin',
+                country: 'Deutschland',
+                private: true
+            },
+            {
+                firstName: 'Todd',
+                lastName: 'Chavez',
+                street: 'Carl-Herz-Ufer',
+                number: 25,
+                zip: 10961,
+                city: 'Berlin',
+                state: 'Berlin',
+                country: 'Deutschland',
+                private: false
+            }
+        ]
+    },
+    {
+        name: "normalo",
+        password: "pass321",
+        contacts: [
+            {
+                firstName: 'Jo',
+                lastName: 'Guenther',
+                street: "Mittenwalder Straße",
+                number: 12,
+                zip: 23433,
+                city: 'Berlin',
+                state: 'Berlin',
+                country: 'Deutschland',
+                private: true
+            },
+            {
+                firstName: 'Hans',
+                lastName: 'Herbert',
+                street: 'Pfarrstraße',
+                number: 113,
+                zip: 10961,
+                city: 'Berlin',
+                state: 'Berlin',
+                country: 'Deutschland',
+                private: false
+            }
+        ]
+    }
 ]
 
 function logout() {
