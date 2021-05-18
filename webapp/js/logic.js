@@ -59,10 +59,12 @@ const users = [
 let loggedInUser
 
 function logout() {
+    loggedInUser = null
     document.getElementById("login").style.display = 'block'
     document.getElementById("mainContent").style.display = 'none'
+    document.getElementById("changeContact").style.display = 'none'
 
-    document.getElementById('contactsDiv').innerHTML = "";
+    document.getElementById('contactsDiv').innerHTML = ""
 }
 
 function login() {
@@ -76,6 +78,7 @@ function login() {
         if (currentUser.name === givenUsername && currentUser.password === givenPassword) {
             document.getElementById("login").style.display = 'none'
             document.getElementById("mainContent").style.display = 'block'
+            document.getElementById("changeContact").style.display = 'none'
             document.getElementById('welcomeHeader').innerHTML = "Welcome " + givenUsername + "!"
             document.getElementById('errorMessageLogin').innerHTML = ''
             loggedInUser = currentUser;
@@ -91,7 +94,6 @@ function login() {
 
 function displayContacts() {
     let contactsDiv = document.getElementById('contactsDiv')
-    loggedInUser
     loggedInUser.contacts.forEach(function (contact) {
         let contactList = document.createElement('UL')
         for (var propertyName in contact) {
