@@ -64,7 +64,7 @@ function logout() {
     loggedInUser = null
     document.getElementById("login").style.display = 'block'
     document.getElementById("mainContent").style.display = 'none'
-    document.getElementById("changeContact").style.display = 'none'
+    document.getElementById("changeContacts").style.display = 'none'
 
     document.getElementById('contactsDiv').innerHTML = ""
 }
@@ -80,7 +80,7 @@ function login() {
         if (currentUser.name === givenUsername && currentUser.password === givenPassword) {
             document.getElementById("login").style.display = 'none'
             document.getElementById("mainContent").style.display = 'block'
-            document.getElementById("changeContact").style.display = 'none'
+            document.getElementById("changeContacts").style.display = 'none'
             document.getElementById('welcomeHeader').innerHTML = "Welcome " + givenUsername + "!"
             document.getElementById('errorMessageLogin').innerHTML = ''
             loggedInUser = currentUser;
@@ -94,6 +94,8 @@ function login() {
     document.getElementById('passwordInput').value = null;
 }
 
+//TODO: Enter = LogInButton-click
+
 function displayContacts() {
     let contactsDiv = document.getElementById('contactsDiv')
     loggedInUser.contacts.forEach(function (contact) {
@@ -104,11 +106,22 @@ function displayContacts() {
         contactsDiv.appendChild(contactList)
     });
 }
-
+//Kontakt Liste neben Karte
 function addContactListElement(contactList, contactAttribute) {
     let listElement = document.createElement("LI");          // Create a <li> node
     let listElementText = document.createTextNode(contactAttribute);         // Create a text node
     listElement.appendChild(listElementText);
     contactList.appendChild(listElement)
 }
+
+function displayChangeContactScreen(){
+    document.getElementById('changeContacts').style.display = 'block'
+    document.getElementById('mainContent').style.display = 'none'
+
+}
+
+/* TODO
+function makeVisible(){
+
+}*/
 
