@@ -2,6 +2,7 @@ const users = [
     {
         name: 'admina',
         password: 'pass123',
+        role: "admin",
         contacts: [
             {
                 firstName: 'Maxime',
@@ -30,6 +31,7 @@ const users = [
     {
         name: "normalo",
         password: "pass321",
+        role: "user",
         contacts: [
             {
                 firstName: 'Jo',
@@ -109,3 +111,4 @@ function addContactListElement(contactList, contactAttribute) {
     listElement.appendChild(listElementText);
     contactList.appendChild(listElement)
 }
+
