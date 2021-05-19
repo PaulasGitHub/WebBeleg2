@@ -62,10 +62,8 @@ let loggedInUser
 
 function logout() {
     loggedInUser = null
-    document.getElementById("login").style.display = 'block'
-    document.getElementById("mainContent").style.display = 'none'
-    document.getElementById("changeContacts").style.display = 'none'
-
+    displayElements('login')
+    hideElements('mainContent', 'changeContacts')
     document.getElementById('contactsDiv').innerHTML = ""
 }
 
@@ -78,9 +76,8 @@ function login() {
     while (userNotFound && currentUserIndex < users.length) {
         let currentUser = users[currentUserIndex]
         if (currentUser.name === givenUsername && currentUser.password === givenPassword) {
-            document.getElementById("login").style.display = 'none'
-            document.getElementById("mainContent").style.display = 'block'
-            document.getElementById("changeContacts").style.display = 'none'
+            hideElements('login', 'changeContacts')
+            displayElements('mainContent')
             document.getElementById('welcomeHeader').innerHTML = "Welcome " + givenUsername + "!"
             document.getElementById('errorMessageLogin').innerHTML = ''
             loggedInUser = currentUser;
@@ -100,12 +97,13 @@ function displayContacts() {
     let contactsDiv = document.getElementById('contactsDiv')
     loggedInUser.contacts.forEach(function (contact) {
         let contactList = document.createElement('UL')
-        for (var propertyName in contact) {
+        for (let propertyName in contact) {
             addContactListElement(contactList, contact[propertyName])
         }
         contactsDiv.appendChild(contactList)
     });
 }
+
 //Kontakt Liste neben Karte
 function addContactListElement(contactList, contactAttribute) {
     let listElement = document.createElement("LI");          // Create a <li> node
@@ -114,14 +112,20 @@ function addContactListElement(contactList, contactAttribute) {
     contactList.appendChild(listElement)
 }
 
-function displayChangeContactScreen(){
-    document.getElementById('changeContacts').style.display = 'block'
-    document.getElementById('mainContent').style.display = 'none'
-
+function displayChangeContactScreen() {
+    displayElements('changeContacts')
+    hideElements('mainContent')
 }
 
-/* TODO
-function makeVisible(){
+function displayElements(...args) {
+    args.forEach(function (elementID) {
+        document.getElementById(elementID).style.display = 'block'
+    });
+}
 
-}*/
+function hideElements(...args) {
+    args.forEach(function (elementID) {
+        document.getElementById(elementID).style.display = 'none'
+    });
+}
 
