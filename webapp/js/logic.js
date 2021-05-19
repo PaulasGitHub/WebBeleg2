@@ -105,6 +105,14 @@ function displayAllContacts() {
         users.forEach(function (user) {
             displayContacts(user.contacts)
         })
+    } else if (currentUserRole === 'user') {
+        users.forEach(function (user) {
+            if (user.name === loggedInUser.name) {
+                displayContacts(user.contacts)
+            } else {
+                displayPublicContactsOnly(user.contacts)
+            }
+        })
     }
 }
 
@@ -117,8 +125,8 @@ function displayOwnContacts() {
 }
 
 /**
- * Display a given contacts array
- * @param contacts given contacts array
+ * Display a given contact array
+ * @param contacts given contact array
  */
 function displayContacts(contacts) {
     let contactsDiv = document.getElementById('contactsDiv')
@@ -129,6 +137,23 @@ function displayContacts(contacts) {
         }
         contactsDiv.appendChild(contactList)
     });
+}
+
+/**
+ * Display only contacts from a given contact array where the private attribute is set to false
+ * @param contacts given contact array
+ */
+function displayPublicContactsOnly(contacts) {
+    let contactsDiv = document.getElementById('contactsDiv')
+    contacts.forEach(function (contact) {
+        if (!contact.private) {
+            let contactList = document.createElement('UL')
+            for (let propertyName in contact) {
+                addContactListElement(contactList, contact[propertyName])
+            }
+            contactsDiv.appendChild(contactList)
+        }
+    })
 }
 
 /**
