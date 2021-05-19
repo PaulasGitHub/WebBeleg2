@@ -60,11 +60,14 @@ const users = [
 ]
 let loggedInUser
 
+/**
+ * Log out currently logged in user
+ */
 function logout() {
     loggedInUser = null
     displayElements('login')
     hideElements('mainContent', 'changeContacts')
-    document.getElementById('contactsDiv').innerHTML = ""
+    clearContactsView()
 }
 
 function login() {
@@ -81,7 +84,7 @@ function login() {
             document.getElementById('welcomeHeader').innerHTML = "Welcome " + givenUsername + "!"
             document.getElementById('errorMessageLogin').innerHTML = ''
             loggedInUser = currentUser;
-            displayContacts()
+            displayOwnContacts()
             userNotFound = false
         }
         currentUserIndex++
@@ -92,10 +95,34 @@ function login() {
 }
 
 //TODO: Enter = LogInButton-click
+/**
+ * Display all contacts depending on the currently logged in role
+ */
+function displayAllContacts() {
+    clearContactsView()
+    let currentUserRole = loggedInUser.role
+    if (currentUserRole === 'admin') {
+        users.forEach(function (user) {
+            displayContacts(user.contacts)
+        })
+    }
+}
 
-function displayContacts() {
+/**
+ * Display only contacts from currently logged in user
+ */
+function displayOwnContacts() {
+    clearContactsView()
+    displayContacts(loggedInUser.contacts)
+}
+
+/**
+ * Display a given contacts array
+ * @param contacts given contacts array
+ */
+function displayContacts(contacts) {
     let contactsDiv = document.getElementById('contactsDiv')
-    loggedInUser.contacts.forEach(function (contact) {
+    contacts.forEach(function (contact) {
         let contactList = document.createElement('UL')
         for (let propertyName in contact) {
             addContactListElement(contactList, contact[propertyName])
@@ -104,7 +131,11 @@ function displayContacts() {
     });
 }
 
-//Kontakt Liste neben Karte
+/**
+ * Add a single contact attribute to a single contact
+ * @param contactList contact where the attribute is added to
+ * @param contactAttribute attribute which will be added
+ */
 function addContactListElement(contactList, contactAttribute) {
     let listElement = document.createElement("LI");          // Create a <li> node
     let listElementText = document.createTextNode(contactAttribute);         // Create a text node
@@ -115,6 +146,10 @@ function addContactListElement(contactList, contactAttribute) {
 function displayChangeContactScreen() {
     displayElements('changeContacts')
     hideElements('mainContent')
+}
+
+function clearContactsView() {
+    document.getElementById('contactsDiv').innerHTML = ""
 }
 
 function displayElements(...args) {
