@@ -143,21 +143,35 @@ function addContactListElement(contactList, contactAttribute) {
     contactList.appendChild(listElement)
 }
 
+/**
+ * Display the "change contacts" screen
+ */
 function displayChangeContactScreen() {
     displayElements('changeContacts')
     hideElements('mainContent')
 }
 
+/**
+ * Remove all contacts from the view
+ */
 function clearContactsView() {
     document.getElementById('contactsDiv').innerHTML = ""
 }
 
+/**
+ * Display all html elements which IDs are given as parameter
+ * @param args variable amount of html element IDs
+ */
 function displayElements(...args) {
     args.forEach(function (elementID) {
         document.getElementById(elementID).style.display = 'block'
     });
 }
 
+/**
+ * Hide all html elements which IDs are given as parameter
+ * @param args variable amount of html element IDs
+ */
 function hideElements(...args) {
     args.forEach(function (elementID) {
         document.getElementById(elementID).style.display = 'none'
