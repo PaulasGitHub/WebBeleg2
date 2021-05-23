@@ -252,3 +252,15 @@ function hideElements(...args) {
     });
 }
 
+
+
+//TODO Check: required fields ausgefüllt bzw. richtig ausgefüllt
+//TODO Check: real existierende geo-data angegeben
+//TODO Marker auf Karte
+//TODO contacts clickable -> go to change/delete Contact Screen
+//TODO Change/DeleteContactScreen
+
+//TODO hübsch machen
+//TODO Daten in JSON-Objekt (optional)
+
+//TODO Fragen: nach hinzufügen von Kontakt: nur neuen Kontakt auf Karte anzeigen oder alle + neu
