@@ -177,6 +177,15 @@ function displayChangeContactScreen() {
 }
 
 /**
+ * Display the "main Content" screen
+ */
+function displayMainContentScreen() {
+    displayElements('mainContent')
+    hideElements('changeContacts')
+}
+
+
+/**
  * Remove all contacts from the view
  */
 function clearContactsView() {
