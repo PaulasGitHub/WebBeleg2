@@ -184,6 +184,17 @@ function addContact(){
     if(loggedInUser.role == "user"){
         loggedInUser.contacts.push(newContact)
     }
+    else if (loggedInUser.role == 'admin'){
+
+        if (document.getElementById('ownerSelectAddForm').value == 'self')
+        loggedInUser.contacts.push(newContact)
+        else {
+            let newArray = users.filter(function (user) {
+                return user.name == 'normalo'
+            });
+            newArray[0].contacts.push(newContact)
+        }
+    }
     displayOwnContacts()
     displayMainContentScreen()
 }
@@ -196,15 +207,13 @@ function readContactInput(newContact, inputID, attributeName){
 /**
  * Display the "change contacts" screen
  */
-function displayChangeContactScreen() {
-    displayElements('changeContacts')
-    hideElements('mainContent')
+function displayAddContactScreen() {
+    displayElements('changeContacts', 'saveButton')
+    hideElements('mainContent', 'updateButtonUpdateForm', 'deleteButtonUpdateForm')
 
     if (loggedInUser.role == "user"){
         hideElements('ownerListElement')
-
     }
-
 }
 
 /**
