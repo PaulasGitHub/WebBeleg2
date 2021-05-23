@@ -8,8 +8,8 @@ const users = [
                 firstName: 'Maxime',
                 lastName: 'Musterfrau',
                 street: 'Sonnenalle',
-                number: 12,
-                zip: 12345,
+                number: '12',
+                zip: '12345',
                 city: 'Berlin',
                 state: 'Berlin',
                 country: 'Deutschland',
@@ -19,8 +19,8 @@ const users = [
                 firstName: 'Todd',
                 lastName: 'Chavez',
                 street: 'Carl-Herz-Ufer',
-                number: 25,
-                zip: 10961,
+                number: '25',
+                zip: '10961',
                 city: 'Berlin',
                 state: 'Berlin',
                 country: 'Deutschland',
@@ -37,8 +37,8 @@ const users = [
                 firstName: 'Jo',
                 lastName: 'Guenther',
                 street: "Mittenwalder Straße",
-                number: 12,
-                zip: 23433,
+                number: '12',
+                zip: '23433',
                 city: 'Berlin',
                 state: 'Berlin',
                 country: 'Deutschland',
@@ -48,8 +48,8 @@ const users = [
                 firstName: 'Hans',
                 lastName: 'Herbert',
                 street: 'Pfarrstraße',
-                number: 113,
-                zip: 10961,
+                number: '113',
+                zip: '10961',
                 city: 'Berlin',
                 state: 'Berlin',
                 country: 'Deutschland',
@@ -168,12 +168,43 @@ function addContactListElement(contactList, contactAttribute) {
     contactList.appendChild(listElement)
 }
 
+function addContact(){
+
+    let newContact = {}
+    readContactInput(newContact, "firstNameInputAddForm", 'firstName')
+    readContactInput(newContact, "lastNameInputAddForm", 'lastName')
+    readContactInput(newContact, "streetInputAddForm", 'street')
+    readContactInput(newContact, "numberInputAddForm", 'number')
+    readContactInput(newContact, "zipInputAddForm", 'zip')
+    readContactInput(newContact, "cityInputAddForm", 'city')
+    readContactInput(newContact, "stateInputAddForm", 'state')
+    readContactInput(newContact, "countryInputAddForm", 'country')
+    newContact["private"] = document.getElementById("privateCheckAddForm").checked
+
+    if(loggedInUser.role == "user"){
+        loggedInUser.contacts.push(newContact)
+    }
+    displayOwnContacts()
+    displayMainContentScreen()
+}
+
+function readContactInput(newContact, inputID, attributeName){
+    newContact[attributeName] = document.getElementById(inputID).value
+}
+
+
 /**
  * Display the "change contacts" screen
  */
 function displayChangeContactScreen() {
     displayElements('changeContacts')
     hideElements('mainContent')
+
+    if (loggedInUser.role == "user"){
+        hideElements('ownerListElement')
+
+    }
+
 }
 
 /**

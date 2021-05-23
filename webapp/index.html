@@ -65,8 +65,7 @@
             <button id="backButton" type="button" onclick="displayMainContentScreen()">Back</button>
         </li>
         <li>
-            <label id=" firstnameLabelAddForm
-            " for="firstNameInputAddForm">First name:</label>
+            <label id="firstnameLabelAddForm" for="firstNameInputAddForm">First name:</label>
             <input type="text" id="firstNameInputAddForm" name="firstname" placeholder="Maxim" required>
         </li>
         <li>
@@ -99,7 +98,7 @@
             <input type="checkbox" id="privateCheckAddForm" name="private" checked>
             <span class="private_hint">Unchecking this box makes the contact public.</span>
         </li>
-        <li>
+        <li id="ownerListElement">
             <label id="ownerLabelAddForm" for="ownerSelectAddForm">Owner:</label>
             <select id="ownerSelectAddForm" name="owner">
                 <option selected>self</option>
@@ -107,7 +106,7 @@
             </select>
         </li>
         <li>
-            <button id="saveButton" type="button">Save</button>
+            <button id="saveButton" type="button" onclick="addContact()">Save</button>
 
             <button id="updateButtonUpdateForm" type="button">Update</button>
             <button id="deleteButtonUpdateForm" type="button">Delete</button>
