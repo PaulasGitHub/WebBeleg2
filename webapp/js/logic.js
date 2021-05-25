@@ -106,6 +106,19 @@ function showOwnContactsOnMapAsMarkers(){
     })
 }
 
+function showAllContactsOnMapAsMarkers(){
+    deleteMarkers()
+
+    let currentUserRole = loggedInUser.role
+    if (currentUserRole === 'admin') {
+        users.forEach(function (user) {
+            user.contacts.forEach(function (contact){
+                addMarkerToMap(contact.street + " " + contact.number + " " + contact.zip + " " + contact.city)
+            })
+        })
+    }
+}
+
 
 // Deletes all markers in the array by removing references to them.
 function deleteMarkers() {
@@ -126,6 +139,7 @@ function setMapOnAll(map) {
  */
 function displayAllContacts() {
     clearContactsView()
+    showAllContactsOnMapAsMarkers()
     let currentUserRole = loggedInUser.role
     if (currentUserRole === 'admin') {
         users.forEach(function (user) {
@@ -147,6 +161,7 @@ function displayAllContacts() {
  */
 function displayOwnContacts() {
     clearContactsView()
+    showOwnContactsOnMapAsMarkers()
     displayContacts(loggedInUser.contacts)
 }
 
@@ -279,7 +294,6 @@ function hideElements(...args) {
 
 
 function initMap() {
-    console.log(JSON.stringify(loggedInUser))
     map = new google.maps.Map(document.getElementById("googleMap"),
         {
             zoom: 12,
@@ -307,11 +321,10 @@ function addMarkerToMap(address) {
 
 //TODO Check: required fields ausgefüllt bzw. richtig ausgefüllt
 //TODO Check: real existierende geo-data angegeben
-//TODO Marker auf Karte
+
 //TODO contacts clickable -> go to change/delete Contact Screen
 //TODO Change/DeleteContactScreen
 
 //TODO hübsch machen
 //TODO Daten in JSON-Objekt (optional)
 
-//TODO Fragen: nach hinzufügen von Kontakt: nur neuen Kontakt auf Karte anzeigen oder alle + neu
