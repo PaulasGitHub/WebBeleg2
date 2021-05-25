@@ -1,5 +1,6 @@
 let map
 let geocoder
+let allMarkers = []
 
 const users = [
     {
@@ -88,6 +89,7 @@ function login() {
             document.getElementById('errorMessageLogin').innerHTML = ''
             loggedInUser = currentUser;
             displayOwnContacts()
+            showOwnContactsOnMapAsMarkers()
             userNotFound = false
         }
         currentUserIndex++
@@ -95,6 +97,27 @@ function login() {
     if (userNotFound) document.getElementById('errorMessageLogin').innerHTML = "Login credentials where incorrect! Please try again!"
     document.getElementById('usernameInput').value = null;
     document.getElementById('passwordInput').value = null;
+}
+
+function showOwnContactsOnMapAsMarkers(){
+    deleteMarkers()
+    loggedInUser.contacts.forEach(function (contact){
+        addMarkerToMap(contact.street + " " + contact.number + " " + contact.zip + " " + contact.city)
+    })
+}
+
+
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+    setMapOnAll(null);
+    allMarkers = [];
+}
+
+// Sets the map on all markers in the array.
+function setMapOnAll(map) {
+    for (let i = 0; i < allMarkers.length; i++) {
+        allMarkers[i].setMap(map);
+    }
 }
 
 //TODO: Enter = LogInButton-click
@@ -270,10 +293,11 @@ function addMarkerToMap(address) {
     geocoder.geocode({'address': address}, function (results, status) {
         if (status === 'OK') {
             map.setCenter(results[0].geometry.location);
-            var marker = new google.maps.Marker({
+            let marker = new google.maps.Marker({
                 map: map,
                 position: results[0].geometry.location
             });
+            allMarkers.push(marker)
         } else {
             alert('Geocode was not successful for the following reason: ' + status);
         }
