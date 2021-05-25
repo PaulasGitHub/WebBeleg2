@@ -1,4 +1,5 @@
-
+let map
+let geocoder
 
 const users = [
     {
@@ -170,7 +171,7 @@ function addContactListElement(contactList, contactAttribute) {
     contactList.appendChild(listElement)
 }
 
-function addContact(){
+function addContact() {
 
     let newContact = {}
     readContactInput(newContact, "firstNameInputAddForm", 'firstName')
@@ -183,13 +184,12 @@ function addContact(){
     readContactInput(newContact, "countryInputAddForm", 'country')
     newContact["private"] = document.getElementById("privateCheckAddForm").checked
 
-    if(loggedInUser.role == "user"){
+    if (loggedInUser.role == "user") {
         loggedInUser.contacts.push(newContact)
-    }
-    else if (loggedInUser.role == 'admin'){
+    } else if (loggedInUser.role == 'admin') {
 
         if (document.getElementById('ownerSelectAddForm').value == 'self')
-        loggedInUser.contacts.push(newContact)
+            loggedInUser.contacts.push(newContact)
         else {
             let newArray = users.filter(function (user) {
                 return user.name == 'normalo'
@@ -201,7 +201,7 @@ function addContact(){
     displayMainContentScreen()
 }
 
-function readContactInput(newContact, inputID, attributeName){
+function readContactInput(newContact, inputID, attributeName) {
     newContact[attributeName] = document.getElementById(inputID).value
 }
 
@@ -213,7 +213,7 @@ function displayAddContactScreen() {
     displayElements('changeContacts', 'saveButton')
     hideElements('mainContent', 'updateButtonUpdateForm', 'deleteButtonUpdateForm')
 
-    if (loggedInUser.role == "user"){
+    if (loggedInUser.role == "user") {
         hideElements('ownerListElement')
     }
 }
@@ -254,28 +254,31 @@ function hideElements(...args) {
     });
 }
 
-//The map, centered at Alexanderplatz
-let map
 
-function initMap(){
-  map =  new google.maps.Map(document.getElementById("googleMap"),
+function initMap() {
+    console.log(JSON.stringify(loggedInUser))
+    map = new google.maps.Map(document.getElementById("googleMap"),
         {
             zoom: 12,
             center: new google.maps.LatLng(52.520008, 13.404954),
         });
 
-    //Location for new Marker
-    const latLng = {lat: 52.518278, lng: 13.408644};
-
-    //new Marker
-    new google.maps.Marker({
-        position: latLng,
-        map
-    });
+    geocoder = new google.maps.Geocoder()
 }
 
-
-
+function addMarkerToMap(address) {
+    geocoder.geocode({'address': address}, function (results, status) {
+        if (status === 'OK') {
+            map.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location
+            });
+        } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+        }
+    });
+}
 
 
 //TODO Check: required fields ausgefüllt bzw. richtig ausgefüllt
