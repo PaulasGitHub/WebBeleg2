@@ -116,7 +116,25 @@ function showAllContactsOnMapAsMarkers(){
                 addMarkerToMap(contact.street + " " + contact.number + " " + contact.zip + " " + contact.city)
             })
         })
+    }else if (currentUserRole === 'user') {
+        users.forEach(function (user) {
+            if (user.name === loggedInUser.name) {
+                user.contacts.forEach(function (contact){
+                    addMarkerToMap(contact.street + " " + contact.number + " " + contact.zip + " " + contact.city)
+                })
+            } else {
+                showPublicContactsOnMapAsMarkers(user.contacts)
+            }
+        })
     }
+}
+
+function showPublicContactsOnMapAsMarkers(contacts){
+    contacts.forEach(function (contact) {
+        if (!contact.private) {
+            addMarkerToMap(contact.street + " " + contact.number + " " + contact.zip + " " + contact.city)
+        }
+    })
 }
 
 
