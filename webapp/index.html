@@ -36,16 +36,10 @@
         <div class="row">
             <div id="contactsDiv" class="column"></div>
             <div id="googleMap" style="width:80%;height:550px;" class="column">
-                <script>
-                    function myMap() {
-                        var mapProp = {
-                            center: new google.maps.LatLng(52.520008, 13.404954),
-                            zoom: 12,
-                        };
-                        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-                    }
+
+                <script
+                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGieGWlCYyMqBi5nYC4XH3pWdak3PMaQE&callback=myMap">
                 </script>
-                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGieGWlCYyMqBi5nYC4XH3pWdak3PMaQE&callback=myMap"></script>
             </div>
         </div>
         <br>

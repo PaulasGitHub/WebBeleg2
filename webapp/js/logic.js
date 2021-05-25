@@ -252,6 +252,25 @@ function hideElements(...args) {
     });
 }
 
+function myMap(){
+    //the Location of Alexanderplatz
+    const berlinAlexanderplatz = {lat: 52.520008, lng: 13.404954}
+
+    //The map, centered at Alexanderplatz
+    const map = new google.maps.Map(document.getElementById("googleMap"),
+    {
+
+        zoom: 16,
+        center: berlinAlexanderplatz
+    })
+
+    //The Marker, positioned at Alexanderplatz
+    const marker =  new google.maps.Marker({
+        position: berlinAlexanderplatz,
+        map: map
+    })
+}
+
 
 
 //TODO Check: required fields ausgefüllt bzw. richtig ausgefüllt
