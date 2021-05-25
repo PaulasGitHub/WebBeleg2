@@ -1,3 +1,5 @@
+
+
 const users = [
     {
         name: 'admina',
@@ -252,24 +254,27 @@ function hideElements(...args) {
     });
 }
 
-function myMap(){
-    //the Location of Alexanderplatz
-    const berlinAlexanderplatz = {lat: 52.520008, lng: 13.404954}
+//The map, centered at Alexanderplatz
+let map
 
-    //The map, centered at Alexanderplatz
-    const map = new google.maps.Map(document.getElementById("googleMap"),
-    {
+function initMap(){
+  map =  new google.maps.Map(document.getElementById("googleMap"),
+        {
+            zoom: 12,
+            center: new google.maps.LatLng(52.520008, 13.404954),
+        });
 
-        zoom: 16,
-        center: berlinAlexanderplatz
-    })
+    //Location for new Marker
+    const latLng = {lat: 52.518278, lng: 13.408644};
 
-    //The Marker, positioned at Alexanderplatz
-    const marker =  new google.maps.Marker({
-        position: berlinAlexanderplatz,
-        map: map
-    })
+    //new Marker
+    new google.maps.Marker({
+        position: latLng,
+        map
+    });
 }
+
+
 
 
 
