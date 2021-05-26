@@ -99,27 +99,26 @@ function login() {
     document.getElementById('passwordInput').value = null;
 }
 
-function showOwnContactsOnMapAsMarkers(){
+function showOwnContactsOnMapAsMarkers() {
     deleteMarkers()
-    loggedInUser.contacts.forEach(function (contact){
+    loggedInUser.contacts.forEach(function (contact) {
         addMarkerToMap(contact.street + " " + contact.number + " " + contact.zip + " " + contact.city)
     })
 }
 
-function showAllContactsOnMapAsMarkers(){
+function showAllContactsOnMapAsMarkers() {
     deleteMarkers()
-
     let currentUserRole = loggedInUser.role
     if (currentUserRole === 'admin') {
         users.forEach(function (user) {
-            user.contacts.forEach(function (contact){
+            user.contacts.forEach(function (contact) {
                 addMarkerToMap(contact.street + " " + contact.number + " " + contact.zip + " " + contact.city)
             })
         })
-    }else if (currentUserRole === 'user') {
+    } else if (currentUserRole === 'user') {
         users.forEach(function (user) {
             if (user.name === loggedInUser.name) {
-                user.contacts.forEach(function (contact){
+                user.contacts.forEach(function (contact) {
                     addMarkerToMap(contact.street + " " + contact.number + " " + contact.zip + " " + contact.city)
                 })
             } else {
@@ -129,7 +128,7 @@ function showAllContactsOnMapAsMarkers(){
     }
 }
 
-function showPublicContactsOnMapAsMarkers(contacts){
+function showPublicContactsOnMapAsMarkers(contacts) {
     contacts.forEach(function (contact) {
         if (!contact.private) {
             addMarkerToMap(contact.street + " " + contact.number + " " + contact.zip + " " + contact.city)
@@ -228,7 +227,6 @@ function addContactListElement(contactList, contactAttribute) {
 }
 
 function addContact() {
-
     let newContact = {}
     readContactInput(newContact, "firstNameInputAddForm", 'firstName')
     readContactInput(newContact, "lastNameInputAddForm", 'lastName')
