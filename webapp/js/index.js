@@ -136,11 +136,12 @@ function hideHTMLElements(...args) {
 }
 
 //TODO Check: required fields ausgefüllt bzw. richtig ausgefüllt
-//TODO Check: real existierende geo-data angegeben
+//TODO Check: real existierende geo-data angegeben (after Contact added - go to Main Screen, show own contacts)
 
 //TODO contacts clickable -> go to change/delete Contact Screen
-//TODO Change/DeleteContactScreen
+//TODO create Change/DeleteContactScreen (after Contact changed - go to Main Screen, show own contacts)
 
-//TODO hübsch machen
+//TODO hübsch machen (CSS)
+//TODO: Enter = LogInButton-click
 //TODO Daten in JSON-Objekt (optional)
 
