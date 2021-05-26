@@ -1,7 +1,3 @@
-let map
-let geocoder
-let allMarkers = []
-
 const users = [
     {
         name: 'admina',
@@ -97,57 +93,6 @@ function login() {
     if (userNotFound) document.getElementById('errorMessageLogin').innerHTML = "Login credentials where incorrect! Please try again!"
     document.getElementById('usernameInput').value = null;
     document.getElementById('passwordInput').value = null;
-}
-
-function showOwnContactsOnMapAsMarkers() {
-    deleteMarkers()
-    loggedInUser.contacts.forEach(function (contact) {
-        addMarkerToMap(contact.street + " " + contact.number + " " + contact.zip + " " + contact.city)
-    })
-}
-
-function showAllContactsOnMapAsMarkers() {
-    deleteMarkers()
-    let currentUserRole = loggedInUser.role
-    if (currentUserRole === 'admin') {
-        users.forEach(function (user) {
-            user.contacts.forEach(function (contact) {
-                addMarkerToMap(contact.street + " " + contact.number + " " + contact.zip + " " + contact.city)
-            })
-        })
-    } else if (currentUserRole === 'user') {
-        users.forEach(function (user) {
-            if (user.name === loggedInUser.name) {
-                user.contacts.forEach(function (contact) {
-                    addMarkerToMap(contact.street + " " + contact.number + " " + contact.zip + " " + contact.city)
-                })
-            } else {
-                showPublicContactsOnMapAsMarkers(user.contacts)
-            }
-        })
-    }
-}
-
-function showPublicContactsOnMapAsMarkers(contacts) {
-    contacts.forEach(function (contact) {
-        if (!contact.private) {
-            addMarkerToMap(contact.street + " " + contact.number + " " + contact.zip + " " + contact.city)
-        }
-    })
-}
-
-
-// Deletes all markers in the array by removing references to them.
-function deleteMarkers() {
-    setMapOnAll(null);
-    allMarkers = [];
-}
-
-// Sets the map on all markers in the array.
-function setMapOnAll(map) {
-    for (let i = 0; i < allMarkers.length; i++) {
-        allMarkers[i].setMap(map);
-    }
 }
 
 //TODO: Enter = LogInButton-click
@@ -307,33 +252,6 @@ function hideElements(...args) {
         document.getElementById(elementID).style.display = 'none'
     });
 }
-
-
-function initMap() {
-    map = new google.maps.Map(document.getElementById("googleMap"),
-        {
-            zoom: 12,
-            center: new google.maps.LatLng(52.520008, 13.404954),
-        });
-
-    geocoder = new google.maps.Geocoder()
-}
-
-function addMarkerToMap(address) {
-    geocoder.geocode({'address': address}, function (results, status) {
-        if (status === 'OK') {
-            map.setCenter(results[0].geometry.location);
-            let marker = new google.maps.Marker({
-                map: map,
-                position: results[0].geometry.location
-            });
-            allMarkers.push(marker)
-        } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-        }
-    });
-}
-
 
 //TODO Check: required fields ausgefüllt bzw. richtig ausgefüllt
 //TODO Check: real existierende geo-data angegeben
