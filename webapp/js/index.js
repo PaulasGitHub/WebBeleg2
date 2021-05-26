@@ -65,8 +65,8 @@ let loggedInUser
  */
 function logout() {
     loggedInUser = null
-    displayElements('login')
-    hideElements('mainContent', 'changeContacts')
+    displayHTMLElements('login')
+    hideHTMLElements('mainContent', 'changeContacts')
     clearContactsView()
 }
 
@@ -79,13 +79,13 @@ function login() {
     while (userNotFound && currentUserIndex < users.length) {
         let currentUser = users[currentUserIndex]
         if (currentUser.name === givenUsername && currentUser.password === givenPassword) {
-            hideElements('login', 'changeContacts')
-            displayElements('mainContent')
+            hideHTMLElements('login', 'changeContacts')
+            displayHTMLElements('mainContent')
             document.getElementById('welcomeHeader').innerHTML = "Welcome " + givenUsername + "!"
             document.getElementById('errorMessageLogin').innerHTML = ''
             loggedInUser = currentUser;
             displayOwnContacts()
-            showOwnContactsOnMapAsMarkers()
+            displayOwnContactsOnMapAsMarkers()
             userNotFound = false
         }
         currentUserIndex++
@@ -98,28 +98,28 @@ function login() {
 /**
  * Display the "change contacts" screen
  */
-function displayAddContactScreen() {
-    displayElements('changeContacts', 'saveButton')
-    hideElements('mainContent', 'updateButtonUpdateForm', 'deleteButtonUpdateForm')
+function displayAddContactView() {
+    displayHTMLElements('changeContacts', 'saveButton')
+    hideHTMLElements('mainContent', 'updateButtonUpdateForm', 'deleteButtonUpdateForm')
 
     if (loggedInUser.role == "user") {
-        hideElements('ownerListElement')
+        hideHTMLElements('ownerListElement')
     }
 }
 
 /**
  * Display the "main Content" screen
  */
-function displayMainContentScreen() {
-    displayElements('mainContent')
-    hideElements('changeContacts')
+function displayMapView() {
+    displayHTMLElements('mainContent')
+    hideHTMLElements('changeContacts')
 }
 
 /**
  * Display all html elements which IDs are given as parameter
  * @param args variable amount of html element IDs
  */
-function displayElements(...args) {
+function displayHTMLElements(...args) {
     args.forEach(function (elementID) {
         document.getElementById(elementID).style.display = 'block'
     });
@@ -129,7 +129,7 @@ function displayElements(...args) {
  * Hide all html elements which IDs are given as parameter
  * @param args variable amount of html element IDs
  */
-function hideElements(...args) {
+function hideHTMLElements(...args) {
     args.forEach(function (elementID) {
         document.getElementById(elementID).style.display = 'none'
     });

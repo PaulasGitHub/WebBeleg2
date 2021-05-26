@@ -1,18 +1,15 @@
 let map
 let geocoder
-let allMarkers = []
+let markers = []
 
-// Deletes all markers in the array by removing references to them.
-function deleteMarkers() {
-    setMapOnAll(null);
-    allMarkers = [];
-}
+function initMap() {
+    map = new google.maps.Map(document.getElementById("googleMap"),
+        {
+            zoom: 12,
+            center: new google.maps.LatLng(52.520008, 13.404954),
+        });
 
-// Sets the map on all markers in the array.
-function setMapOnAll(map) {
-    for (let i = 0; i < allMarkers.length; i++) {
-        allMarkers[i].setMap(map);
-    }
+    geocoder = new google.maps.Geocoder()
 }
 
 function addContactsAsMarker(contacts) {
@@ -30,29 +27,19 @@ function addMarkerToMap(address) {
                 map: map,
                 position: results[0].geometry.location
             });
-            allMarkers.push(marker)
+            markers.push(marker)
         } else {
             alert('Geocode was not successful for the following reason: ' + status);
         }
     });
 }
 
-function initMap() {
-    map = new google.maps.Map(document.getElementById("googleMap"),
-        {
-            zoom: 12,
-            center: new google.maps.LatLng(52.520008, 13.404954),
-        });
-
-    geocoder = new google.maps.Geocoder()
-}
-
-function showOwnContactsOnMapAsMarkers() {
+function displayOwnContactsOnMapAsMarkers() {
     deleteMarkers()
     addContactsAsMarker(loggedInUser.contacts)
 }
 
-function showAllContactsOnMapAsMarkers() {
+function displayAllContactsOnMapAsMarkers() {
     deleteMarkers()
     let currentUserRole = loggedInUser.role
     if (currentUserRole === 'admin') {
@@ -73,4 +60,17 @@ function showAllContactsOnMapAsMarkers() {
 function showPublicContactsOnMapAsMarkers(contacts) {
     let publicContacts = contacts.filter(contact => !contact.private)
     addContactsAsMarker(publicContacts)
+}
+
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+    setMapOnAll(null);
+    markers = [];
+}
+
+// Sets the map on all markers in the array.
+function setMapOnAll(map) {
+    for (let i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+    }
 }

@@ -4,18 +4,18 @@
  */
 function displayAllContacts() {
     clearContactsView()
-    showAllContactsOnMapAsMarkers()
+    displayAllContactsOnMapAsMarkers()
     let currentUserRole = loggedInUser.role
     if (currentUserRole === 'admin') {
         users.forEach(function (user) {
-            displayContacts(user.contacts)
+            displayContactArray(user.contacts)
         })
     } else if (currentUserRole === 'user') {
         users.forEach(function (user) {
             if (user.name === loggedInUser.name) {
-                displayContacts(user.contacts)
+                displayContactArray(user.contacts)
             } else {
-                displayPublicContactsOnly(user.contacts)
+                displayPublicContactsFromArray(user.contacts)
             }
         })
     }
@@ -26,15 +26,15 @@ function displayAllContacts() {
  */
 function displayOwnContacts() {
     clearContactsView()
-    showOwnContactsOnMapAsMarkers()
-    displayContacts(loggedInUser.contacts)
+    displayOwnContactsOnMapAsMarkers()
+    displayContactArray(loggedInUser.contacts)
 }
 
 /**
  * Display a given contact array
  * @param contacts given contact array
  */
-function displayContacts(contacts) {
+function displayContactArray(contacts) {
     let contactsDiv = document.getElementById('contactsDiv')
     contacts.forEach(function (contact) {
         let contactList = document.createElement('UL')
@@ -49,7 +49,7 @@ function displayContacts(contacts) {
  * Display only contacts from a given contact array where the private attribute is set to false
  * @param contacts given contact array
  */
-function displayPublicContactsOnly(contacts) {
+function displayPublicContactsFromArray(contacts) {
     let contactsDiv = document.getElementById('contactsDiv')
     contacts.forEach(function (contact) {
         if (!contact.private) {
@@ -100,7 +100,7 @@ function addContact() {
         }
     }
     displayOwnContacts()
-    displayMainContentScreen()
+    displayMapView()
 }
 
 function readContactInput(newContact, inputID, attributeName) {
