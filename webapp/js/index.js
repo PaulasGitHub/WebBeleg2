@@ -99,6 +99,8 @@ function login() {
  * Display the "change contacts" screen
  */
 function displayAddContactView() {
+   // document.querySelector('#saveButton').addEventListener('click', validateContactInput);
+    validateContactInput()
     displayHTMLElements('changeContacts', 'saveButton')
     hideHTMLElements('mainContent', 'updateButtonUpdateForm', 'deleteButtonUpdateForm')
 

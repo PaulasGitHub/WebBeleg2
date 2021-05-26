@@ -1,4 +1,3 @@
-
 /**
  * Display all contacts depending on the currently logged in role
  */
@@ -74,37 +73,55 @@ function addContactListElement(contactList, contactAttribute) {
     contactList.appendChild(listElement)
 }
 
+
 function addContact() {
-    let newContact = {}
-    readContactInput(newContact, "firstNameInputAddForm", 'firstName')
-    readContactInput(newContact, "lastNameInputAddForm", 'lastName')
-    readContactInput(newContact, "streetInputAddForm", 'street')
-    readContactInput(newContact, "numberInputAddForm", 'number')
-    readContactInput(newContact, "zipInputAddForm", 'zip')
-    readContactInput(newContact, "cityInputAddForm", 'city')
-    readContactInput(newContact, "stateInputAddForm", 'state')
-    readContactInput(newContact, "countryInputAddForm", 'country')
-    newContact["private"] = document.getElementById("privateCheckAddForm").checked
+        let newContact = {}
+        readContactInput(newContact, "firstNameInputAddForm", 'firstName')
+        readContactInput(newContact, "lastNameInputAddForm", 'lastName')
+        readContactInput(newContact, "streetInputAddForm", 'street')
+        readContactInput(newContact, "numberInputAddForm", 'number')
+        readContactInput(newContact, "zipInputAddForm", 'zip')
+        readContactInput(newContact, "cityInputAddForm", 'city')
+        readContactInput(newContact, "stateInputAddForm", 'state')
+        readContactInput(newContact, "countryInputAddForm", 'country')
+        newContact["private"] = document.getElementById("privateCheckAddForm").checked
 
-    if (loggedInUser.role == "user") {
-        loggedInUser.contacts.push(newContact)
-    } else if (loggedInUser.role == 'admin') {
-
-        if (document.getElementById('ownerSelectAddForm').value == 'self')
+        if (loggedInUser.role == "user") {
             loggedInUser.contacts.push(newContact)
-        else {
-            let newArray = users.filter(function (user) {
-                return user.name == 'normalo'
-            });
-            newArray[0].contacts.push(newContact)
+        } else if (loggedInUser.role == 'admin') {
+
+            if (document.getElementById('ownerSelectAddForm').value == 'self')
+                loggedInUser.contacts.push(newContact)
+            else {
+                let newArray = users.filter(function (user) {
+                    return user.name == 'normalo'
+                });
+                newArray[0].contacts.push(newContact)
+            }
         }
-    }
-    displayOwnContacts()
-    displayMapView()
+        displayOwnContacts()
+        displayMapView()
 }
 
 function readContactInput(newContact, inputID, attributeName) {
     newContact[attributeName] = document.getElementById(inputID).value
+}
+
+function validateContactInput(){
+    console.log("lets validate");
+    let valid = false
+    let fname = document.getElementById("firstNameInputAddForm");
+    fname.addEventListener("input", function (event){
+        if(fname.validity.valueMissing){
+            valid = false
+            console.log("valid: " + valid)
+            fname.setCustomValidity("pw not correct");
+        } else {
+            valid = true
+            console.log("valid: " + valid)
+            fname.setCustomValidity("");
+        }
+    })
 }
 
 /**
