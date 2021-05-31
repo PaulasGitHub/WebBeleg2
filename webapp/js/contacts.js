@@ -54,12 +54,35 @@ function displayPublicContactsFromArray(contacts) {
     })
 }
 
-function changeContact(event) {
+function displayChangeContact(event) {
     displayChangeContactView()
-    let list = event.target.parentElement.children
-    for (let item of list) {
-        console.log(item.innerHTML)
-    }
+    let contactWithOwner = getContactByID(event.target.id)
+    document.getElementById('firstNameInputAddForm').value = contactWithOwner.contact.firstName
+    document.getElementById('lastNameInputAddForm').value = contactWithOwner.contact.lastName
+    document.getElementById('streetInputAddForm').value = contactWithOwner.contact.street
+    document.getElementById('numberInputAddForm').value = contactWithOwner.contact.number
+    document.getElementById('zipInputAddForm').value = contactWithOwner.contact.zip
+    document.getElementById('cityInputAddForm').value = contactWithOwner.contact.city
+    document.getElementById('zipInputAddForm').value = contactWithOwner.contact.zip
+    document.getElementById('stateInputAddForm').value = contactWithOwner.contact.state
+    document.getElementById('countryInputAddForm').value = contactWithOwner.contact.country
+    document.getElementById('privateCheckAddForm').checked = contactWithOwner.contact.private
+    //TODO owner
+}
+
+function getContactByID(id) {
+    let contactWithOwner
+    users.forEach(function (user) {
+        user.contacts.forEach(function (contact) {
+            if (contact.id == id) {
+                contactWithOwner = {
+                    owner: user.name,
+                    contact: contact
+                }
+            }
+        })
+    })
+    return contactWithOwner
 }
 
 /**
@@ -71,6 +94,7 @@ function addContactListElement(contactList, contact) {
     let listElement = document.createElement("p");
     listElement.setAttribute("id", contact.id)
     listElement.innerHTML = contact.firstName + " " + contact.lastName
+    listElement.addEventListener("click", displayChangeContact)
     contactList.appendChild(listElement)
 }
 
