@@ -70,7 +70,14 @@ function logout() {
     clearContactsView()
 }
 
-function login() {
+function initApp() {
+    logout()
+    document.getElementById("login").addEventListener('submit', login)
+    document.getElementById("changeContacts").addEventListener('submit', addContact)
+}
+
+function login(e) {
+    e.preventDefault()
     let givenUsername = document.getElementById('usernameInput').value
     let givenPassword = document.getElementById('passwordInput').value
 
@@ -96,11 +103,23 @@ function login() {
 }
 
 /**
- * Display the "change contacts" screen
+ * Display the "add contacts" screen
  */
 function displayAddContactView() {
     displayHTMLElements('changeContacts', 'saveButton')
     hideHTMLElements('mainContent', 'updateButtonUpdateForm', 'deleteButtonUpdateForm')
+
+    if (loggedInUser.role == "user") {
+        hideHTMLElements('ownerListElement')
+    }
+}
+
+/**
+ * Display the "update/delete contacts" screen
+ */
+function displayChangeContactView() {
+    displayHTMLElements('changeContacts', 'updateButtonUpdateForm', 'deleteButtonUpdateForm')
+    hideHTMLElements('mainContent', 'saveButton')
 
     if (loggedInUser.role == "user") {
         hideHTMLElements('ownerListElement')

@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <title>Kapau's Adviz</title>
     <link rel="stylesheet" href="css/style.css">
-    <script src="js/index.js"></script>
     <script src="js/map.js"></script>
+    <script src="js/index.js"></script>
     <script src="js/contacts.js"></script>
 </head>
-<body onload="logout()">
+<body onload="initApp()">
 <div class="projectTitle">
     <h1>KaPau's Adviz</h1>
 </div>
 <!--LogIn-Screen-->
-<div id="login">
+<form id="login">
     <h2>Login</h2><br>
     <ul>
         <li>
@@ -25,9 +25,9 @@
             <input type="password" id="passwordInput" name="password" required>
         </li>
     </ul>
-    <button id="loginButton" type="button" onclick="login()">Log in</button>
+    <button id="loginButton" type="submit">Log in</button>
     <h3 id="errorMessageLogin"></h3>
-</div>
+</form>
 <br/><br/>
 <!--Main Screen-->
 <div id="mainContent">
@@ -52,7 +52,7 @@
 </div>
 <br/><br/>
 <!--Add-Contact-Screen-->
-<div id="changeContacts">
+<form id="changeContacts">
     <h2>Add Contact</h2>
     <ul>
         <li>
@@ -100,13 +100,12 @@
             </select>
         </li>
         <li>
-            <button id="saveButton" type="button" onclick="addContact()">Save</button>
+            <button id="saveButton" type="submit">Save</button>
             <button id="updateButtonUpdateForm" type="button">Update</button>
             <button id="deleteButtonUpdateForm" type="button">Delete</button>
         </li>
     </ul>
 
-</div>
-
+</form>
 </body>
 </html>

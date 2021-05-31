@@ -38,6 +38,7 @@ function displayContactArray(contacts) {
     let contactsDiv = document.getElementById('contactsDiv')
     contacts.forEach(function (contact) {
         let contactList = document.createElement('UL')
+        contactList.onclick = changeContact
         for (let propertyName in contact) {
             addContactListElement(contactList, contact[propertyName])
         }
@@ -54,12 +55,21 @@ function displayPublicContactsFromArray(contacts) {
     contacts.forEach(function (contact) {
         if (!contact.private) {
             let contactList = document.createElement('UL')
+            contactList.onclick = changeContact
             for (let propertyName in contact) {
                 addContactListElement(contactList, contact[propertyName])
             }
             contactsDiv.appendChild(contactList)
         }
     })
+}
+
+function changeContact(event) {
+    displayChangeContactView()
+    let list = event.target.parentElement.children
+    for (let item of list) {
+        console.log(item.innerHTML)
+    }
 }
 
 /**
@@ -74,7 +84,8 @@ function addContactListElement(contactList, contactAttribute) {
     contactList.appendChild(listElement)
 }
 
-function addContact() {
+function addContact(event) {
+    event.preventDefault()
     let newContact = {}
     readContactInput(newContact, "firstNameInputAddForm", 'firstName')
     readContactInput(newContact, "lastNameInputAddForm", 'lastName')
