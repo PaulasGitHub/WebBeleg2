@@ -84,8 +84,7 @@ function addContactListElement(contactList, contactAttribute) {
     contactList.appendChild(listElement)
 }
 
-function addContact(event) {
-    event.preventDefault()
+function addContact() {
     let newContact = {}
     readContactInput(newContact, "firstNameInputAddForm", 'firstName')
     readContactInput(newContact, "lastNameInputAddForm", 'lastName')

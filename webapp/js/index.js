@@ -72,12 +72,9 @@ function logout() {
 
 function initApp() {
     logout()
-    document.getElementById("login").addEventListener('submit', login)
-    document.getElementById("changeContacts").addEventListener('submit', addContact)
 }
 
-function login(e) {
-    e.preventDefault()
+function login() {
     let givenUsername = document.getElementById('usernameInput').value
     let givenPassword = document.getElementById('passwordInput').value
 
