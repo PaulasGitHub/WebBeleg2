@@ -5,6 +5,7 @@ const users = [
         role: "admin",
         contacts: [
             {
+                id: 1,
                 firstName: 'Maxime',
                 lastName: 'Musterfrau',
                 street: 'Sonnenalle',
@@ -16,6 +17,7 @@ const users = [
                 private: true
             },
             {
+                id: 2,
                 firstName: 'Todd',
                 lastName: 'Chavez',
                 street: 'Carl-Herz-Ufer',
@@ -34,6 +36,7 @@ const users = [
         role: "user",
         contacts: [
             {
+                id: 3,
                 firstName: 'Jo',
                 lastName: 'Guenther',
                 street: "Mittenwalder Straße",
@@ -45,6 +48,7 @@ const users = [
                 private: true
             },
             {
+                id: 4,
                 firstName: 'Hans',
                 lastName: 'Herbert',
                 street: 'Pfarrstraße',
@@ -59,6 +63,7 @@ const users = [
     }
 ]
 let loggedInUser
+let nextID = 5
 
 /**
  * Log out currently logged in user

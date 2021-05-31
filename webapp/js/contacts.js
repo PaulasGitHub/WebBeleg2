@@ -35,14 +35,9 @@ function displayOwnContacts() {
  * @param contacts given contact array
  */
 function displayContactArray(contacts) {
-    let contactsDiv = document.getElementById('contactsDiv')
+    let contactDiv = document.getElementById('contactsDiv')
     contacts.forEach(function (contact) {
-        let contactList = document.createElement('UL')
-        contactList.onclick = changeContact
-        for (let propertyName in contact) {
-            addContactListElement(contactList, contact[propertyName])
-        }
-        contactsDiv.appendChild(contactList)
+        addContactListElement(contactDiv, contact)
     });
 }
 
@@ -51,15 +46,10 @@ function displayContactArray(contacts) {
  * @param contacts given contact array
  */
 function displayPublicContactsFromArray(contacts) {
-    let contactsDiv = document.getElementById('contactsDiv')
+    let contactDiv = document.getElementById('contactsDiv')
     contacts.forEach(function (contact) {
         if (!contact.private) {
-            let contactList = document.createElement('UL')
-            contactList.onclick = changeContact
-            for (let propertyName in contact) {
-                addContactListElement(contactList, contact[propertyName])
-            }
-            contactsDiv.appendChild(contactList)
+            addContactListElement(contactDiv, contact)
         }
     })
 }
@@ -77,15 +67,16 @@ function changeContact(event) {
  * @param contactList contact where the attribute is added to
  * @param contactAttribute attribute which will be added
  */
-function addContactListElement(contactList, contactAttribute) {
-    let listElement = document.createElement("LI");          // Create a <li> node
-    let listElementText = document.createTextNode(contactAttribute);         // Create a text node
-    listElement.appendChild(listElementText);
+function addContactListElement(contactList, contact) {
+    let listElement = document.createElement("p");
+    listElement.setAttribute("id", contact.id)
+    listElement.innerHTML = contact.firstName + " " + contact.lastName
     contactList.appendChild(listElement)
 }
 
 function addContact() {
     let newContact = {}
+    newContact.id = nextID++
     readContactInput(newContact, "firstNameInputAddForm", 'firstName')
     readContactInput(newContact, "lastNameInputAddForm", 'lastName')
     readContactInput(newContact, "streetInputAddForm", 'street')
