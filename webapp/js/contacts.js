@@ -1,3 +1,5 @@
+let currentSelectedContactID
+
 //TODO: Enter = LogInButton-click
 /**
  * Display all contacts depending on the currently logged in role
@@ -68,6 +70,7 @@ function displayChangeContact(event) {
     document.getElementById('countryInputAddForm').value = contactWithOwner.contact.country
     document.getElementById('privateCheckAddForm').checked = contactWithOwner.contact.private
     //TODO owner
+    currentSelectedContactID = contactWithOwner.contact.id
 }
 
 function getContactByID(id) {
@@ -137,4 +140,20 @@ function readContactInput(newContact, inputID, attributeName) {
  */
 function clearContactsView() {
     document.getElementById('contactsDiv').innerHTML = ""
+}
+
+function deleteContact() {
+    console.log("Hallo")
+    users.forEach(function (user) {
+        user.contacts.forEach(function (contact, index) {
+            console.log(currentSelectedContactID)
+            console.log(contact.id)
+            if (contact.id == currentSelectedContactID) {
+                console.log(currentSelectedContactID + " " + index)
+                user.contacts.splice(index, 1)
+            }
+        })
+    })
+    displayMapView()
+    displayOwnContacts()
 }
