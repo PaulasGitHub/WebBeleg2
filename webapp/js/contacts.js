@@ -143,14 +143,30 @@ function clearContactsView() {
 }
 
 function deleteContact() {
-    console.log("Hallo")
     users.forEach(function (user) {
         user.contacts.forEach(function (contact, index) {
-            console.log(currentSelectedContactID)
-            console.log(contact.id)
             if (contact.id == currentSelectedContactID) {
-                console.log(currentSelectedContactID + " " + index)
                 user.contacts.splice(index, 1)
+            }
+        })
+    })
+    displayMapView()
+    displayOwnContacts()
+}
+
+function updateContact() {
+    users.forEach(function (user) {
+        user.contacts.forEach(function (contact, index) {
+            if (contact.id == currentSelectedContactID) {
+                contact.firstName = document.getElementById("firstNameInputAddForm").value
+                contact.lastName = document.getElementById("lastNameInputAddForm").value
+                contact.street = document.getElementById("streetInputAddForm").value
+                contact.number = document.getElementById("numberInputAddForm").value
+                contact.zip = document.getElementById("zipInputAddForm").value
+                contact.city = document.getElementById("cityInputAddForm").value
+                contact.state = document.getElementById("stateInputAddForm").value
+                contact.country = document.getElementById("countryInputAddForm").value
+                contact.private = document.getElementById("privateCheckAddForm").checked
             }
         })
     })
