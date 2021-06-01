@@ -1,6 +1,5 @@
 let currentSelectedContactID
 
-//TODO: Enter = LogInButton-click
 /**
  * Display all contacts depending on the currently logged in role
  */
