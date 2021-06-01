@@ -59,6 +59,9 @@ function displayChangeContact(event) {
     let contactWithOwner = getContactByID(event.target.id)
     if (loggedInUser.role == "admin" || (loggedInUser.role == "user" && loggedInUser.name == contactWithOwner.owner)) {
         displayChangeContactView()
+        if (loggedInUser.role == "user") {
+            hideHTMLElements('ownerSelectAddForm', 'ownerLabelAddForm')
+        }
         document.getElementById('firstNameInputAddForm').value = contactWithOwner.contact.firstName
         document.getElementById('lastNameInputAddForm').value = contactWithOwner.contact.lastName
         document.getElementById('streetInputAddForm').value = contactWithOwner.contact.street
@@ -69,7 +72,7 @@ function displayChangeContact(event) {
         document.getElementById('stateInputAddForm').value = contactWithOwner.contact.state
         document.getElementById('countryInputAddForm').value = contactWithOwner.contact.country
         document.getElementById('privateCheckAddForm').checked = contactWithOwner.contact.private
-        //TODO owner
+        document.getElementById('ownerSelectAddForm').value = contactWithOwner.owner
         currentSelectedContactID = contactWithOwner.contact.id
     }
 }
@@ -144,15 +147,17 @@ function clearContactsView() {
 }
 
 function deleteContact() {
+    let deletedUser
     users.forEach(function (user) {
         user.contacts.forEach(function (contact, index) {
             if (contact.id == currentSelectedContactID) {
-                user.contacts.splice(index, 1)
+                deletedUser = user.contacts.splice(index, 1)[0]
             }
         })
     })
     displayMapView()
     displayOwnContacts()
+    return deletedUser
 }
 
 function updateContact() {
@@ -168,6 +173,11 @@ function updateContact() {
                 contact.state = document.getElementById("stateInputAddForm").value
                 contact.country = document.getElementById("countryInputAddForm").value
                 contact.private = document.getElementById("privateCheckAddForm").checked
+                let selectedOwnerValue = document.getElementById('ownerSelectAddForm').value
+                if (loggedInUser.role == "admin" && user.name != selectedOwnerValue) {
+                    let deletedContact = deleteContact()
+                    users.find(user => user.name == selectedOwnerValue).contacts.push(deletedContact)
+                }
             }
         })
     })
