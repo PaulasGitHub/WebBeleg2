@@ -57,20 +57,22 @@ function displayPublicContactsFromArray(contacts) {
 }
 
 function displayChangeContact(event) {
-    displayChangeContactView()
     let contactWithOwner = getContactByID(event.target.id)
-    document.getElementById('firstNameInputAddForm').value = contactWithOwner.contact.firstName
-    document.getElementById('lastNameInputAddForm').value = contactWithOwner.contact.lastName
-    document.getElementById('streetInputAddForm').value = contactWithOwner.contact.street
-    document.getElementById('numberInputAddForm').value = contactWithOwner.contact.number
-    document.getElementById('zipInputAddForm').value = contactWithOwner.contact.zip
-    document.getElementById('cityInputAddForm').value = contactWithOwner.contact.city
-    document.getElementById('zipInputAddForm').value = contactWithOwner.contact.zip
-    document.getElementById('stateInputAddForm').value = contactWithOwner.contact.state
-    document.getElementById('countryInputAddForm').value = contactWithOwner.contact.country
-    document.getElementById('privateCheckAddForm').checked = contactWithOwner.contact.private
-    //TODO owner
-    currentSelectedContactID = contactWithOwner.contact.id
+    if (loggedInUser.role == "admin" || (loggedInUser.role == "user" && loggedInUser.name == contactWithOwner.owner)) {
+        displayChangeContactView()
+        document.getElementById('firstNameInputAddForm').value = contactWithOwner.contact.firstName
+        document.getElementById('lastNameInputAddForm').value = contactWithOwner.contact.lastName
+        document.getElementById('streetInputAddForm').value = contactWithOwner.contact.street
+        document.getElementById('numberInputAddForm').value = contactWithOwner.contact.number
+        document.getElementById('zipInputAddForm').value = contactWithOwner.contact.zip
+        document.getElementById('cityInputAddForm').value = contactWithOwner.contact.city
+        document.getElementById('zipInputAddForm').value = contactWithOwner.contact.zip
+        document.getElementById('stateInputAddForm').value = contactWithOwner.contact.state
+        document.getElementById('countryInputAddForm').value = contactWithOwner.contact.country
+        document.getElementById('privateCheckAddForm').checked = contactWithOwner.contact.private
+        //TODO owner
+        currentSelectedContactID = contactWithOwner.contact.id
+    }
 }
 
 function getContactByID(id) {
