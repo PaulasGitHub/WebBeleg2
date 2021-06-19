@@ -122,7 +122,7 @@ function addContact() {
         loggedInUser.contacts.push(newContact)
     } else if (loggedInUser.role == 'admin') {
 
-        if (document.getElementById('ownerSelectAddForm').value == 'self')
+        if (document.getElementById('ownerSelectAddForm').value == 'admina')
             loggedInUser.contacts.push(newContact)
         else {
             let newArray = users.filter(function (user) {
@@ -184,3 +184,16 @@ function updateContact() {
     displayMapView()
     displayOwnContacts()
 }
+
+function addressCorrect(){
+    let addCorrect = false;
+
+    geocoder.geocode({'address': address}, function (results, status) {
+        if (status === 'OK') {
+            addCorrect = true
+        } else {addCorrect =  false}
+})
+    print(addCorrect)
+return addCorrect
+}
+
