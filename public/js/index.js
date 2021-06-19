@@ -47,7 +47,7 @@ function displayAddContactView() {
     displayHTMLElements('changeContacts', 'saveButton')
     hideHTMLElements('mainContent', 'updateButtonUpdateForm', 'deleteButtonUpdateForm')
 
-    if (loggedInUser.role == "user") {
+    if (!loggedInUser.isAdmin) {
         hideHTMLElements('ownerListElement')
     }
 }
@@ -59,7 +59,7 @@ function displayChangeContactView() {
     displayHTMLElements('changeContacts', 'updateButtonUpdateForm', 'deleteButtonUpdateForm')
     hideHTMLElements('mainContent', 'saveButton')
 
-    if (loggedInUser.role == "user") {
+    if (!loggedInUser.isAdmin) {
         hideHTMLElements('ownerListElement')
     }
 }

@@ -2,7 +2,7 @@ const users = [
     {
         name: 'admina',
         password: 'pass123',
-        role: "admin",
+        isAdmin: true,
         contacts: [
             {
                 id: 1,
@@ -33,7 +33,7 @@ const users = [
     {
         name: "normalo",
         password: "pass321",
-        role: "user",
+        isAdmin: false,
         contacts: [
             {
                 id: 3,
