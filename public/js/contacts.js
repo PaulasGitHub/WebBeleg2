@@ -184,3 +184,16 @@ function updateContact() {
     displayMapView()
     displayOwnContacts()
 }
+
+function addressCorrect(){
+    let addCorrect = false;
+
+    geocoder.geocode({'address': address}, function (results, status) {
+        if (status === 'OK') {
+            addCorrect = true
+        } else {addCorrect =  false}
+})
+    print(addCorrect)
+return addCorrect
+}
+
