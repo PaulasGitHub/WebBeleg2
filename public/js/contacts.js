@@ -122,7 +122,7 @@ function addContact() {
         loggedInUser.contacts.push(newContact)
     } else if (loggedInUser.role == 'admin') {
 
-        if (document.getElementById('ownerSelectAddForm').value == 'self')
+        if (document.getElementById('ownerSelectAddForm').value == 'admina')
             loggedInUser.contacts.push(newContact)
         else {
             let newArray = users.filter(function (user) {
