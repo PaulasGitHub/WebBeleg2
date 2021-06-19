@@ -1,6 +1,7 @@
 let map
 let geocoder
 let markers = []
+let addressOK
 
 function initMap() {
     map = new google.maps.Map(document.getElementById("googleMap"),
@@ -26,12 +27,24 @@ function addMarkerToMap(address) {
             let marker = new google.maps.Marker({
                 map: map,
                 position: results[0].geometry.location
+
             });
             markers.push(marker)
         } else {
             alert('Geocode was not successful for the following reason: ' + status);
+
         }
-    });
+    })
+}
+
+function checkAddress(address) {
+    geocoder.geocode({'address': address}, function (results, status) {
+        if (status === 'OK') {
+           addressOK = true
+        } else {
+            addressOK = false
+        }
+    })
 }
 
 function displayOwnContactsOnMapAsMarkers() {

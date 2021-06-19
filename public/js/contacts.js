@@ -106,7 +106,11 @@ function addContactListElement(contactList, contact) {
 }
 
 function addContact() {
+
+
     let newContact = {}
+
+
     newContact.id = nextID++
     readContactInput(newContact, "firstNameInputAddForm", 'firstName')
     readContactInput(newContact, "lastNameInputAddForm", 'lastName')
@@ -118,21 +122,31 @@ function addContact() {
     readContactInput(newContact, "countryInputAddForm", 'country')
     newContact["private"] = document.getElementById("privateCheckAddForm").checked
 
-    if (loggedInUser.role == "user") {
-        loggedInUser.contacts.push(newContact)
-    } else if (loggedInUser.role == 'admin') {
+    let adress = (newContact.street + newContact.number + newContact.zip + newContact.city)
+    checkAddress(adress)
+    if (!addressOK) {
 
-        if (document.getElementById('ownerSelectAddForm').value == 'admina')
+        if (loggedInUser.role == "user") {
             loggedInUser.contacts.push(newContact)
-        else {
-            let newArray = users.filter(function (user) {
-                return user.name == 'normalo'
-            });
-            newArray[0].contacts.push(newContact)
+        } else if (loggedInUser.role == 'admin') {
+
+            if (document.getElementById('ownerSelectAddForm').value == 'admina')
+                loggedInUser.contacts.push(newContact)
+            else {
+                let newArray = users.filter(function (user) {
+                    return user.name == 'normalo'
+                });
+                newArray[0].contacts.push(newContact)
+            }
+            displayOwnContacts()
+            displayMapView()
         }
+    } else if (addressOK){
+        alert('This is not a correct adress.');
+        console.log('false')
     }
-    displayOwnContacts()
-    displayMapView()
+
+
 }
 
 function readContactInput(newContact, inputID, attributeName) {
@@ -185,15 +199,4 @@ function updateContact() {
     displayOwnContacts()
 }
 
-function addressCorrect(){
-    let addCorrect = false;
-
-    geocoder.geocode({'address': address}, function (results, status) {
-        if (status === 'OK') {
-            addCorrect = true
-        } else {addCorrect =  false}
-})
-    print(addCorrect)
-return addCorrect
-}
 
