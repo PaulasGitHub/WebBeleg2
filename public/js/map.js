@@ -48,7 +48,7 @@ function displayAllContactsOnMapAsMarkers() {
         })
     } else {
         users.forEach(function (user) {
-            if (user.userID === loggedInUser.userID) {
+            if (user.userId === loggedInUser.userId) {
                 addContactsAsMarker(user.contacts)
             } else {
                 showPublicContactsOnMapAsMarkers(user.contacts)

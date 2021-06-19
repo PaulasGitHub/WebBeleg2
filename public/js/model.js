@@ -1,6 +1,6 @@
 const users = [
     {
-        userID: 'admina',
+        userId: 'admina',
         password: 'pass123',
         isAdmin: true,
         contacts: [
@@ -31,7 +31,7 @@ const users = [
         ]
     },
     {
-        userID: "normalo",
+        userId: "normalo",
         password: "pass321",
         isAdmin: false,
         contacts: [
@@ -65,14 +65,14 @@ const users = [
 
 const usersNEW = [
     {
-        userID: 'admina',
+        userId: 'admina',
         firstName: 'Paula',
         lastName: 'Paetzold',
         password: 'pass123',
         isAdmin: true
     },
     {
-        userID: "normalo",
+        userId: "normalo",
         firstName: 'Karl',
         lastName: 'Schulz',
         password: "pass321",

@@ -23,7 +23,7 @@ function login() {
     let currentUserIndex = 0
     while (userNotFound && currentUserIndex < users.length) {
         let currentUser = users[currentUserIndex]
-        if (currentUser.userID === givenUsername && currentUser.password === givenPassword) {
+        if (currentUser.userId === givenUsername && currentUser.password === givenPassword) {
             hideHTMLElements('login', 'changeContacts')
             displayHTMLElements('mainContent')
             document.getElementById('welcomeHeader').innerHTML = "Welcome " + givenUsername + "!"

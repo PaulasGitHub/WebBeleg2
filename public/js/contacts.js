@@ -12,7 +12,7 @@ function displayAllContacts() {
         })
     } else {
         users.forEach(function (user) {
-            if (user.userID === loggedInUser.userID) {
+            if (user.userId === loggedInUser.userId) {
                 displayContactArray(user.contacts)
             } else {
                 displayPublicContactsFromArray(user.contacts)
@@ -56,7 +56,7 @@ function displayPublicContactsFromArray(contacts) {
 
 function displayChangeContact(event) {
     let contactWithOwner = getContactByID(event.target.id)
-    if (loggedInUser.isAdmin || (!loggedInUser.isAdmin && loggedInUser.userID == contactWithOwner.owner)) {
+    if (loggedInUser.isAdmin || (!loggedInUser.isAdmin && loggedInUser.userId == contactWithOwner.owner)) {
         displayChangeContactView()
         if (!loggedInUser.isAdmin) {
             hideHTMLElements('ownerSelectAddForm', 'ownerLabelAddForm')
@@ -82,7 +82,7 @@ function getContactByID(id) {
         user.contacts.forEach(function (contact) {
             if (contact.id == id) {
                 contactWithOwner = {
-                    owner: user.userID,
+                    owner: user.userId,
                     contact: contact
                 }
             }
@@ -124,7 +124,7 @@ function addContact() {
             loggedInUser.contacts.push(newContact)
         else {
             let newArray = users.filter(function (user) {
-                return user.userID == 'normalo'
+                return user.userId == 'normalo'
             });
             newArray[0].contacts.push(newContact)
         }
@@ -172,9 +172,9 @@ function updateContact() {
                 contact.country = document.getElementById("countryInputAddForm").value
                 contact.private = document.getElementById("privateCheckAddForm").checked
                 let selectedOwnerValue = document.getElementById('ownerSelectAddForm').value
-                if (loggedInUser.isAdmin && user.userID != selectedOwnerValue) {
+                if (loggedInUser.isAdmin && user.userId != selectedOwnerValue) {
                     let deletedContact = deleteContact()
-                    users.find(user => user.userID == selectedOwnerValue).contacts.push(deletedContact)
+                    users.find(user => user.userId == selectedOwnerValue).contacts.push(deletedContact)
                 }
             }
         })
