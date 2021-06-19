@@ -41,14 +41,14 @@ function displayOwnContactsOnMapAsMarkers() {
 
 function displayAllContactsOnMapAsMarkers() {
     deleteMarkers()
-    let currentUserRole = loggedInUser.role
-    if (currentUserRole === 'admin') {
+    let currentUserIsAdmin = loggedInUser.isAdmin
+    if (currentUserIsAdmin) {
         users.forEach(function (user) {
             addContactsAsMarker(user.contacts)
         })
-    } else if (currentUserRole === 'user') {
+    } else {
         users.forEach(function (user) {
-            if (user.name === loggedInUser.name) {
+            if (user.userID === loggedInUser.userID) {
                 addContactsAsMarker(user.contacts)
             } else {
                 showPublicContactsOnMapAsMarkers(user.contacts)

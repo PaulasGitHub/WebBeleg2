@@ -21,7 +21,7 @@ function isLoginCredentialValid(loginCredentials) {
     let validatedCredentials = null
     validatedCredentials.loginValid = false
     users.forEach(function (user) {
-        if (user.name == loginCredentials.name && user.password == loginCredentials.password) {
+        if (user.userID == loginCredentials.name && user.password == loginCredentials.password) {
             validatedCredentials.loginValid = true;
             validatedCredentials.user = user
         }

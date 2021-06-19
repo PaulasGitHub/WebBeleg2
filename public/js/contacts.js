@@ -12,7 +12,7 @@ function displayAllContacts() {
         })
     } else {
         users.forEach(function (user) {
-            if (user.name === loggedInUser.name) {
+            if (user.userID === loggedInUser.userID) {
                 displayContactArray(user.contacts)
             } else {
                 displayPublicContactsFromArray(user.contacts)
@@ -56,7 +56,7 @@ function displayPublicContactsFromArray(contacts) {
 
 function displayChangeContact(event) {
     let contactWithOwner = getContactByID(event.target.id)
-    if (loggedInUser.isAdmin || (!loggedInUser.isAdmin && loggedInUser.name == contactWithOwner.owner)) {
+    if (loggedInUser.isAdmin || (!loggedInUser.isAdmin && loggedInUser.userID == contactWithOwner.owner)) {
         displayChangeContactView()
         if (!loggedInUser.isAdmin) {
             hideHTMLElements('ownerSelectAddForm', 'ownerLabelAddForm')
@@ -82,7 +82,7 @@ function getContactByID(id) {
         user.contacts.forEach(function (contact) {
             if (contact.id == id) {
                 contactWithOwner = {
-                    owner: user.name,
+                    owner: user.userID,
                     contact: contact
                 }
             }
@@ -120,12 +120,11 @@ function addContact() {
     if (!loggedInUser.isAdmin) {
         loggedInUser.contacts.push(newContact)
     } else if (loggedInUser.isAdmin) {
-
         if (document.getElementById('ownerSelectAddForm').value == 'admina')
             loggedInUser.contacts.push(newContact)
         else {
             let newArray = users.filter(function (user) {
-                return user.name == 'normalo'
+                return user.userID == 'normalo'
             });
             newArray[0].contacts.push(newContact)
         }
@@ -173,9 +172,9 @@ function updateContact() {
                 contact.country = document.getElementById("countryInputAddForm").value
                 contact.private = document.getElementById("privateCheckAddForm").checked
                 let selectedOwnerValue = document.getElementById('ownerSelectAddForm').value
-                if (loggedInUser.isAdmin && user.name != selectedOwnerValue) {
+                if (loggedInUser.isAdmin && user.userID != selectedOwnerValue) {
                     let deletedContact = deleteContact()
-                    users.find(user => user.name == selectedOwnerValue).contacts.push(deletedContact)
+                    users.find(user => user.userID == selectedOwnerValue).contacts.push(deletedContact)
                 }
             }
         })
