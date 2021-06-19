@@ -7,4 +7,12 @@ router.get('/', function (req, res, next) {
     //res.send('respond with a resource');
 });
 
+router.post('/login', function (req, res) {
+    if (true) {
+        res.status(200)
+    } else {
+        res.status(401).send('Unauthorized')
+    }
+})
+
 module.exports = router;
