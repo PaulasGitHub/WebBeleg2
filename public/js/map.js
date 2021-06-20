@@ -34,6 +34,14 @@ function addMarkerToMap(address) {
     });
 }
 
+function validateAddress(address) {
+    return geocoder.geocode({'address': address}, function (results, status) {
+        if (!status === 'OK') {
+            alert('Geocode was not successful for the following reason: ' + status);
+        }
+    });
+}
+
 function displayOwnContactsOnMapAsMarkers() {
     deleteMarkers()
     addContactsAsMarker(loggedInUser.contacts)

@@ -116,19 +116,23 @@ function addContact() {
     readContactInput(newContact, "stateInputAddForm", 'state')
     readContactInput(newContact, "countryInputAddForm", 'country')
     newContact["private"] = document.getElementById("privateCheckAddForm").checked
-
-    if (!loggedInUser.isAdmin) {
-        loggedInUser.contacts.push(newContact)
-    } else if (loggedInUser.isAdmin) {
-        if (document.getElementById('ownerSelectAddForm').value == 'admina')
+    let validAddress = validateAddress(newContact.street + " " + newContact.number + " " + newContact.zip + " " + newContact.city)
+    validAddress.then(function () {
+        if (!loggedInUser.isAdmin) {
             loggedInUser.contacts.push(newContact)
-        else {
-            let newArray = users.filter(function (user) {
-                return user.userId == 'normalo'
-            });
-            newArray[0].contacts.push(newContact)
+        } else if (loggedInUser.isAdmin) {
+            if (document.getElementById('ownerSelectAddForm').value == 'admina')
+                loggedInUser.contacts.push(newContact)
+            else {
+                let newArray = users.filter(function (user) {
+                    return user.userId == 'normalo'
+                });
+                newArray[0].contacts.push(newContact)
+            }
         }
-    }
+    }).catch(error => {
+        console.error('The given address was not valid')
+    })
     displayOwnContacts()
     displayMapView()
 }
