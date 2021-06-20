@@ -91,6 +91,7 @@ const contactsNEW = [
         city: 'Berlin',
         state: 'Berlin',
         country: 'Deutschland',
+        owner: 'admina',
         private: true
     },
     {
@@ -103,6 +104,7 @@ const contactsNEW = [
         city: 'Berlin',
         state: 'Berlin',
         country: 'Deutschland',
+        owner: 'admina',
         private: false
     },
     {
@@ -115,6 +117,7 @@ const contactsNEW = [
         city: 'Berlin',
         state: 'Berlin',
         country: 'Deutschland',
+        owner: 'normalo',
         private: true
     },
     {
@@ -127,6 +130,7 @@ const contactsNEW = [
         city: 'Berlin',
         state: 'Berlin',
         country: 'Deutschland',
+        owner: 'normalo',
         private: false
     }
 ]
