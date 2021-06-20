@@ -47,6 +47,14 @@ function checkAddress(address) {
     })
 }
 
+function validateAddress(address) {
+    return geocoder.geocode({'address': address}, function (results, status) {
+        if (!status === 'OK') {
+            alert('Geocode was not successful for the following reason: ' + status);
+        }
+    });
+}
+
 function displayOwnContactsOnMapAsMarkers() {
     deleteMarkers()
     addContactsAsMarker(loggedInUser.contacts)
@@ -54,14 +62,14 @@ function displayOwnContactsOnMapAsMarkers() {
 
 function displayAllContactsOnMapAsMarkers() {
     deleteMarkers()
-    let currentUserRole = loggedInUser.role
-    if (currentUserRole === 'admin') {
+    let currentUserIsAdmin = loggedInUser.isAdmin
+    if (currentUserIsAdmin) {
         users.forEach(function (user) {
             addContactsAsMarker(user.contacts)
         })
-    } else if (currentUserRole === 'user') {
+    } else {
         users.forEach(function (user) {
-            if (user.name === loggedInUser.name) {
+            if (user.userId === loggedInUser.userId) {
                 addContactsAsMarker(user.contacts)
             } else {
                 showPublicContactsOnMapAsMarkers(user.contacts)

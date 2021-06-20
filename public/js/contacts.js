@@ -6,14 +6,13 @@ let currentSelectedContactID
 function displayAllContacts() {
     clearContactsView()
     displayAllContactsOnMapAsMarkers()
-    let currentUserRole = loggedInUser.role
-    if (currentUserRole === 'admin') {
+    if (loggedInUser.isAdmin) {
         users.forEach(function (user) {
             displayContactArray(user.contacts)
         })
-    } else if (currentUserRole === 'user') {
+    } else {
         users.forEach(function (user) {
-            if (user.name === loggedInUser.name) {
+            if (user.userId === loggedInUser.userId) {
                 displayContactArray(user.contacts)
             } else {
                 displayPublicContactsFromArray(user.contacts)
@@ -57,9 +56,9 @@ function displayPublicContactsFromArray(contacts) {
 
 function displayChangeContact(event) {
     let contactWithOwner = getContactByID(event.target.id)
-    if (loggedInUser.role == "admin" || (loggedInUser.role == "user" && loggedInUser.name == contactWithOwner.owner)) {
+    if (loggedInUser.isAdmin || (!loggedInUser.isAdmin && loggedInUser.userId == contactWithOwner.owner)) {
         displayChangeContactView()
-        if (loggedInUser.role == "user") {
+        if (!loggedInUser.isAdmin) {
             hideHTMLElements('ownerSelectAddForm', 'ownerLabelAddForm')
         }
         document.getElementById('firstNameInputAddForm').value = contactWithOwner.contact.firstName
@@ -83,7 +82,7 @@ function getContactByID(id) {
         user.contacts.forEach(function (contact) {
             if (contact.id == id) {
                 contactWithOwner = {
-                    owner: user.name,
+                    owner: user.userId,
                     contact: contact
                 }
             }
@@ -106,11 +105,7 @@ function addContactListElement(contactList, contact) {
 }
 
 function addContact() {
-
-
     let newContact = {}
-
-
     newContact.id = nextID++
     readContactInput(newContact, "firstNameInputAddForm", 'firstName')
     readContactInput(newContact, "lastNameInputAddForm", 'lastName')
@@ -121,32 +116,25 @@ function addContact() {
     readContactInput(newContact, "stateInputAddForm", 'state')
     readContactInput(newContact, "countryInputAddForm", 'country')
     newContact["private"] = document.getElementById("privateCheckAddForm").checked
-
-    let adress = (newContact.street + newContact.number + newContact.zip + newContact.city)
-    checkAddress(adress)
-    if (!addressOK) {
-
-        if (loggedInUser.role == "user") {
+    let validAddress = validateAddress(newContact.street + " " + newContact.number + " " + newContact.zip + " " + newContact.city)
+    validAddress.then(function () {
+        if (!loggedInUser.isAdmin) {
             loggedInUser.contacts.push(newContact)
-        } else if (loggedInUser.role == 'admin') {
-
+        } else if (loggedInUser.isAdmin) {
             if (document.getElementById('ownerSelectAddForm').value == 'admina')
                 loggedInUser.contacts.push(newContact)
             else {
                 let newArray = users.filter(function (user) {
-                    return user.name == 'normalo'
+                    return user.userId == 'normalo'
                 });
                 newArray[0].contacts.push(newContact)
             }
-            displayOwnContacts()
-            displayMapView()
         }
-    } else if (addressOK){
-        alert('This is not a correct adress.');
-        console.log('false')
-    }
-
-
+    }).catch(error => {
+        console.error('The given address was not valid')
+    })
+    displayOwnContacts()
+    displayMapView()
 }
 
 function readContactInput(newContact, inputID, attributeName) {
@@ -188,9 +176,9 @@ function updateContact() {
                 contact.country = document.getElementById("countryInputAddForm").value
                 contact.private = document.getElementById("privateCheckAddForm").checked
                 let selectedOwnerValue = document.getElementById('ownerSelectAddForm').value
-                if (loggedInUser.role == "admin" && user.name != selectedOwnerValue) {
+                if (loggedInUser.isAdmin && user.userId != selectedOwnerValue) {
                     let deletedContact = deleteContact()
-                    users.find(user => user.name == selectedOwnerValue).contacts.push(deletedContact)
+                    users.find(user => user.userId == selectedOwnerValue).contacts.push(deletedContact)
                 }
             }
         })
@@ -199,4 +187,17 @@ function updateContact() {
     displayOwnContacts()
 }
 
+function addressCorrect() {
+    let addCorrect = false;
+
+    geocoder.geocode({'address': address}, function (results, status) {
+        if (status === 'OK') {
+            addCorrect = true
+        } else {
+            addCorrect = false
+        }
+    })
+    print(addCorrect)
+    return addCorrect
+}
 

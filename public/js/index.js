@@ -23,7 +23,7 @@ function login() {
     let currentUserIndex = 0
     while (userNotFound && currentUserIndex < users.length) {
         let currentUser = users[currentUserIndex]
-        if (currentUser.name === givenUsername && currentUser.password === givenPassword) {
+        if (currentUser.userId === givenUsername && currentUser.password === givenPassword) {
             hideHTMLElements('login', 'changeContacts')
             displayHTMLElements('mainContent')
             document.getElementById('welcomeHeader').innerHTML = "Welcome " + givenUsername + "!"
@@ -47,7 +47,9 @@ function displayAddContactView() {
     displayHTMLElements('changeContacts', 'saveButton')
     hideHTMLElements('mainContent', 'updateButtonUpdateForm', 'deleteButtonUpdateForm')
 
-    if (loggedInUser.role == "user") {
+    if (loggedInUser.isAdmin) {
+        displayHTMLElements('ownerListElement')
+    } else {
         hideHTMLElements('ownerListElement')
     }
 }
@@ -59,7 +61,9 @@ function displayChangeContactView() {
     displayHTMLElements('changeContacts', 'updateButtonUpdateForm', 'deleteButtonUpdateForm')
     hideHTMLElements('mainContent', 'saveButton')
 
-    if (loggedInUser.role == "user") {
+    if (loggedInUser.isAdmin) {
+        displayHTMLElements('ownerListElement')
+    } else {
         hideHTMLElements('ownerListElement')
     }
 }

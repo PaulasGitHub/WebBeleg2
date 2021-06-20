@@ -8,11 +8,26 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/login', function (req, res) {
-    if (true) {
-        res.status(200)
+    let loginCredential = req.body
+    let validatedCredential = isLoginCredentialValid(loginCredential)
+    if (validatedCredential.loginValid) {
+        res.status(200).json(validatedCredential.user)
     } else {
         res.status(401).send('Unauthorized')
     }
 })
+
+function isLoginCredentialValid(loginCredentials) {
+    let validatedCredential = null
+    validatedCredential.loginValid = false
+    users.forEach(function (user) {
+        //TODO Check if loginCredentials.name is still valid
+        if (user.userId == loginCredentials.name && user.password == loginCredentials.password) {
+            validatedCredential.loginValid = true;
+            validatedCredential.user = user
+        }
+    })
+    return validatedCredential
+}
 
 module.exports = router;
