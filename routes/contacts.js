@@ -15,7 +15,7 @@ router.delete('/:id', function (req, res) {
     res.status(204)
 })
 
-router.post('/:id', function (req, res) {
+router.put('/:id', function (req, res) {
     let contactId = req.params.id;
     res.status(204)
 })
