@@ -30,4 +30,21 @@ function isLoginCredentialValid(loginCredentials) {
     return validatedCredential
 }
 
+const usersNEW = [
+    {
+        userId: 'admina',
+        firstName: 'Paula',
+        lastName: 'Paetzold',
+        password: 'pass123',
+        isAdmin: true
+    },
+    {
+        userId: "normalo",
+        firstName: 'Karl',
+        lastName: 'Schulz',
+        password: "pass321",
+        isAdmin: false
+    }
+]
+
 module.exports = router;
