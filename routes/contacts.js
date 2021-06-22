@@ -1,12 +1,38 @@
 let express = require('express');
+const MongoClient = require('mongodb').MongoClient;
 let router = express.Router();
 
+const url = "mongodb://localhost:27017/";
+const dbName = 'advizDB'
+const contactsCollections = 'contacts'
+
 router.get('/', function (req, res) {
-    let requestedUserId = req.query.userId
-    let filteredContacts = contactsNEW.filter(function (contact) {
-        return contact.owner == requestedUserId
-    })
-    res.status(200).json(filteredContacts)
+    if (req.query.hasOwnProperty('userId')) {
+        let requestedUserId = req.query.userId
+        MongoClient.connect(url, {useUnifiedTopology: true},
+            function (err, client) {
+                if (err) {
+                    throw err
+                }
+                let db = client.db(dbName);
+                db.collection(contactsCollections).find({owner: requestedUserId}).toArray(
+                    function (err, result) {
+                        if (err) {
+                            throw err;
+                        }
+                        if (result.length == 0) {
+                            res.sendStatus(404)
+                        } else {
+                            res.sendStatus(200).json(result)
+                            client.close();
+                        }
+                    }
+                )
+            }
+        )
+    } else {
+        res.sendStatus(400)
+    }
 })
 
 router.post('/', function (req, res) {
