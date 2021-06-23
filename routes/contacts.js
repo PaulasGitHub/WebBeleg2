@@ -23,9 +23,10 @@ router.get('/', function (req, res) {
                         if (result.length == 0) {
                             res.sendStatus(404)
                         } else {
-                            res.sendStatus(200).json(result)
-                            client.close();
+                            //TODO Fragen fragen warum .send() err auslößt
+                            res.json(result)
                         }
+                        client.close();
                     }
                 )
             }
