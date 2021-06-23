@@ -34,10 +34,27 @@ router.get('/', function (req, res) {
     } else {
         res.sendStatus(400)
     }
+
 })
 
 router.post('/', function (req, res) {
-    res.status(201)
+    MongoClient.connect(url, {useUnifiedTopology: true},
+        function (err, client) {
+            if (err) {
+                throw err
+            }
+            let db = client.db(dbName);
+            db.collection(contactsCollections).insertOne(req.body, function (err, result) {
+                if (err)
+                    throw err
+                else
+                    res.sendStatus(201);
+                //TODO db.close oder client.close
+                client.close();
+            })
+        }
+    )
+
 })
 
 router.delete('/:id', function (req, res) {
@@ -106,3 +123,7 @@ const contactsNEW = [
 ]
 
 module.exports = router;
+
+//TODO app.listen(port, () => {
+//     console.log('Example app listening on port ' + port + '!');
+// });
