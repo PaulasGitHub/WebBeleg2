@@ -67,7 +67,17 @@ router.delete('/:id', function (req, res) {
 
 router.put('/:id', function (req, res) {
     let contactId = req.params.id;
-    res.status(204)
+    MongoClient.connect(url, {useUnifiedTopology: true}, function (err, client) {
+        if (err) throw err
+        let query = {_id: ObjectId(contactId)}
+        let updatedContact = req.body
+        let db = client.db(dbName)
+        db.collection(contactsCollections).updateOne(query, {$set: updatedContact}, function (err, result) {
+            if (err) throw err
+            res.sendStatus(204)
+            client.close()
+        })
+    })
 })
 
 const contactsNEW = [
