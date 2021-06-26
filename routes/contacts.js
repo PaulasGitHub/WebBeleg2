@@ -1,7 +1,7 @@
 let express = require('express');
 const MongoClient = require('mongodb').MongoClient;
 let router = express.Router();
-var ObjectId = require('mongodb').ObjectID;
+let ObjectId = require('mongodb').ObjectID;
 
 const url = "mongodb://localhost:27017/";
 const dbName = 'advizDB'
@@ -33,7 +33,7 @@ router.get('/', function (req, res) {
     }
 
 })
-
+//TODO return new location
 router.post('/', function (req, res) {
     MongoClient.connect(url, {useUnifiedTopology: true},
         function (err, client) {
@@ -41,8 +41,10 @@ router.post('/', function (req, res) {
             let db = client.db(dbName);
             db.collection(contactsCollections).insertOne(req.body, function (err, result) {
                 if (err) throw err
-                else
+                else {
+                    res.location('/contacts/' + result.insertedId)
                     res.sendStatus(201);
+                }
                 //TODO db.close oder client.close
                 client.close();
             })
