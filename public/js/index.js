@@ -42,11 +42,10 @@ function loginValidatedUser(e) {
     let data = this.response;
     let obj = JSON.parse(data);
     if (this.status == 200) {
-        console.log(obj);
         loggedInUser = obj
         hideHTMLElements('login', 'changeContacts')
         displayHTMLElements('mainContent')
-        document.getElementById('welcomeHeader').innerHTML = "Welcome " + loggedInUser.userId + "!"
+        document.getElementById('welcomeHeader').innerHTML = "Welcome " + loggedInUser.firstName + " " + loggedInUser.lastName + "!"
         document.getElementById('errorMessageLogin').innerHTML = ''
         displayOwnContacts()
         displayOwnContactsOnMapAsMarkers()
@@ -55,31 +54,6 @@ function loginValidatedUser(e) {
         console.log("HTTP-status code was: " + obj.status);
     }
 }
-
-// function login() {
-//     let givenUsername = document.getElementById('usernameInput').value
-//     let givenPassword = document.getElementById('passwordInput').value
-//
-//     let userNotFound = true
-//     let currentUserIndex = 0
-//     while (userNotFound && currentUserIndex < users.length) {
-//         let currentUser = users[currentUserIndex]
-//         if (currentUser.userId === givenUsername && currentUser.password === givenPassword) {
-//             hideHTMLElements('login', 'changeContacts')
-//             displayHTMLElements('mainContent')
-//             document.getElementById('welcomeHeader').innerHTML = "Welcome " + givenUsername + "!"
-//             document.getElementById('errorMessageLogin').innerHTML = ''
-//             loggedInUser = currentUser;
-//             displayOwnContacts()
-//             displayOwnContactsOnMapAsMarkers()
-//             userNotFound = false
-//         }
-//         currentUserIndex++
-//     }
-//     if (userNotFound) document.getElementById('errorMessageLogin').innerHTML = "Login credentials where incorrect! Please try again!"
-//     document.getElementById('usernameInput').value = null;
-//     document.getElementById('passwordInput').value = null;
-// }
 
 /**
  * Display the "add contacts" screen
