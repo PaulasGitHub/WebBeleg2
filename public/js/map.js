@@ -42,9 +42,9 @@ function validateAddress(address) {
     });
 }
 
-function displayOwnContactsOnMapAsMarkers() {
+function displayOwnContactsOnMapAsMarkers(contacts) {
     deleteMarkers()
-    addContactsAsMarker(loggedInUser.contacts)
+    addContactsAsMarker(contacts)
 }
 
 function displayAllContactsOnMapAsMarkers() {

@@ -47,8 +47,7 @@ function loginValidatedUser(e) {
         displayHTMLElements('mainContent')
         document.getElementById('welcomeHeader').innerHTML = "Welcome " + loggedInUser.firstName + " " + loggedInUser.lastName + "!"
         document.getElementById('errorMessageLogin').innerHTML = ''
-        displayOwnContacts()
-        displayOwnContactsOnMapAsMarkers()
+        requestOwnContacts()
     } else {
         document.getElementById('errorMessageLogin').innerHTML = "Login credentials where incorrect! Please try again!"
         console.log("HTTP-status code was: " + obj.status);

@@ -21,13 +21,33 @@ function displayAllContacts() {
     }
 }
 
-/**
- * Display only contacts from currently logged in user
- */
-function displayOwnContacts() {
+function requestOwnContacts() {
     clearContactsView()
-    displayOwnContactsOnMapAsMarkers()
-    displayContactArray(loggedInUser.contacts)
+    getContactByID(loggedInUser.userId)
+}
+
+function getContactByID(userId) {
+    let httpRequest = new XMLHttpRequest();
+    let url = "http://localhost:3000/contacts?userId=" + userId
+    httpRequest.open("GET", url, true)
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.onerror = function () {
+        console.log("Connecting to server with " + url + " failed!\n");
+    };
+    //TODO Rename
+    httpRequest.onload = displayOwnContacts
+    httpRequest.send()
+}
+
+function displayOwnContacts() {
+    let data = this.response;
+    let obj = JSON.parse(data);
+    if (this.status == 200) {
+        displayOwnContactsOnMapAsMarkers(obj)
+        displayContactArray(obj)
+    } else {
+        console.log("HTTP-status code was: " + obj.status);
+    }
 }
 
 /**
@@ -76,21 +96,6 @@ function displayChangeContact(event) {
     }
 }
 
-function getContactByID(id) {
-    let contactWithOwner
-    users.forEach(function (user) {
-        user.contacts.forEach(function (contact) {
-            if (contact.id == id) {
-                contactWithOwner = {
-                    owner: user.userId,
-                    contact: contact
-                }
-            }
-        })
-    })
-    return contactWithOwner
-}
-
 /**
  * Add a single contact attribute to a single contact
  * @param contactList contact where the attribute is added to
@@ -133,7 +138,7 @@ function addContact() {
     }).catch(error => {
         console.error('The given address was not valid')
     })
-    displayOwnContacts()
+    requestOwnContacts()
     displayMapView()
 }
 
@@ -157,8 +162,8 @@ function deleteContact() {
             }
         })
     })
+    requestOwnContacts()
     displayMapView()
-    displayOwnContacts()
     return deletedUser
 }
 
@@ -183,8 +188,8 @@ function updateContact() {
             }
         })
     })
+    requestOwnContacts()
     displayMapView()
-    displayOwnContacts()
 }
 
 function addressCorrect() {
