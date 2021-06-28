@@ -33,7 +33,7 @@ router.get('/', function (req, res) {
     }
 
 })
-//TODO return new location
+
 router.post('/', function (req, res) {
     MongoClient.connect(url, {useUnifiedTopology: true},
         function (err, client) {

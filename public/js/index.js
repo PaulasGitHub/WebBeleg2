@@ -15,6 +15,43 @@ function initApp() {
     logout()
 }
 
+function loginNEW() {
+    let givenUsername = document.getElementById('usernameInput').value
+    let givenPassword = document.getElementById('passwordInput').value
+
+    let httpRequest = new XMLHttpRequest();
+    let url = "http://localhost:3000/users/login"
+
+    httpRequest.open("POST", url, true)
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+
+    httpRequest.onerror = function () {
+        console.log("Connecting to server with " + url + " failed!\n");
+    };
+
+    httpRequest.onload = function (e) {
+        let data = this.response;
+        let obj = JSON.parse(data);
+        if (this.status == 200) {
+            console.log(obj);
+            loggedInUser = obj
+            hideHTMLElements('login', 'changeContacts')
+            displayHTMLElements('mainContent')
+            document.getElementById('welcomeHeader').innerHTML = "Welcome " + loggedInUser.userId + "!"
+            document.getElementById('errorMessageLogin').innerHTML = ''
+            displayOwnContacts()
+            displayOwnContactsOnMapAsMarkers()
+        } else {     //Handhabung von nicht-200er
+            document.getElementById('errorMessageLogin').innerHTML = "Login credentials where incorrect! Please try again!"
+            console.log("HTTP-status code was: " + obj.status);
+        }
+    };
+    let json = JSON.stringify({userId: givenUsername, password: givenPassword})
+    httpRequest.send(json);
+    document.getElementById('usernameInput').value = null;
+    document.getElementById('passwordInput').value = null;
+}
+
 function login() {
     let givenUsername = document.getElementById('usernameInput').value
     let givenPassword = document.getElementById('passwordInput').value
