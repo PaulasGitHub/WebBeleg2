@@ -45,7 +45,6 @@ router.post('/', function (req, res) {
                     res.location('/contacts/' + result.insertedId)
                     res.sendStatus(201);
                 }
-                //TODO db.close oder client.close
                 client.close();
             })
         }
