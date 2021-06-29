@@ -1,26 +1,5 @@
 let currentSelectedContactID
 
-/**
- * Display all contacts depending on the currently logged in role
- */
-function displayAllContacts() {
-    clearContactsView()
-    displayAllContactsOnMapAsMarkers()
-    if (loggedInUser.isAdmin) {
-        users.forEach(function (user) {
-            displayContactArray(user.contacts)
-        })
-    } else {
-        users.forEach(function (user) {
-            if (user.userId === loggedInUser.userId) {
-                displayContactArray(user.contacts)
-            } else {
-                displayPublicContactsFromArray(user.contacts)
-            }
-        })
-    }
-}
-
 function requestAllAccessibleContacts() {
     clearContactsView()
     getAllContacts()
@@ -99,19 +78,6 @@ function displayContactArray(contacts) {
     contacts.forEach(function (contact) {
         addContactListElement(contactDiv, contact)
     });
-}
-
-/**
- * Display only contacts from a given contact array where the private attribute is set to false
- * @param contacts given contact array
- */
-function displayPublicContactsFromArray(contacts) {
-    let contactDiv = document.getElementById('contactsDiv')
-    contacts.forEach(function (contact) {
-        if (!contact.private) {
-            addContactListElement(contactDiv, contact)
-        }
-    })
 }
 
 function displayChangeContact(event) {
