@@ -8,7 +8,6 @@ const dbName = 'advizDB'
 const contactsCollections = 'contacts'
 
 router.get('/', function (req, res) {
-    console.log(req.query)
     let query = req.query
     if (query.hasOwnProperty('userId')) {
         let requestedUserId = query.userId
@@ -72,7 +71,6 @@ router.delete('/:id', function (req, res) {
         let db = client.db(dbName);
         db.collection(contactsCollections).deleteOne({_id: ObjectId(contactId)}, function (err, result) {
             if (err) throw err
-            console.log(result)
             res.sendStatus(204)
             client.close()
         })

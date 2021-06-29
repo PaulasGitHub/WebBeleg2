@@ -21,7 +21,6 @@ function displayAllAccessibleContacts() {
     let data = this.response;
     let allContacts = JSON.parse(data);
     if (this.status == 200) {
-        console.log(allContacts)
         if (loggedInUser.isAdmin) {
             addContactsAsMarker(allContacts)
             displayContactArray(allContacts)
@@ -113,6 +112,48 @@ function addContactListElement(contactList, contact) {
     listElement.innerHTML = contact.firstName + " " + contact.lastName
     listElement.addEventListener("click", displayChangeContact)
     contactList.appendChild(listElement)
+}
+
+function addContactNEW() {
+    let newContact = {}
+    readContactInput(newContact, "firstNameInputAddForm", 'firstName')
+    readContactInput(newContact, "lastNameInputAddForm", 'lastName')
+    readContactInput(newContact, "streetInputAddForm", 'street')
+    readContactInput(newContact, "numberInputAddForm", 'number')
+    readContactInput(newContact, "zipInputAddForm", 'zip')
+    readContactInput(newContact, "cityInputAddForm", 'city')
+    readContactInput(newContact, "stateInputAddForm", 'state')
+    readContactInput(newContact, "countryInputAddForm", 'country')
+    newContact["private"] = document.getElementById("privateCheckAddForm").checked
+    if (loggedInUser.isAdmin) {
+        newContact.owner = document.getElementById('ownerSelectAddForm').value
+    } else {
+        newContact.owner = loggedInUser.userId
+    }
+    let validAddress = validateAddress(newContact.street + " " + newContact.number + " " + newContact.zip + " " + newContact.city)
+    validAddress
+        .then(function () {
+            postNewContact(newContact)
+        })
+        .catch(error => {
+            console.error('The given address was not valid')
+        })
+}
+
+function postNewContact(newContact) {
+    let httpRequest = new XMLHttpRequest();
+    let url = "http://localhost:3000/contacts"
+    httpRequest.open("POST", url, true)
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.onerror = function () {
+        console.log("Connecting to server with " + url + " failed!\n");
+    };
+    httpRequest.onload = function () {
+        requestOwnContacts()
+        displayMapView()
+    }
+    let json = JSON.stringify(newContact)
+    httpRequest.send(json)
 }
 
 function addContact() {
