@@ -8,8 +8,10 @@ const dbName = 'advizDB'
 const contactsCollections = 'contacts'
 
 router.get('/', function (req, res) {
-    if (req.query.hasOwnProperty('userId')) {
-        let requestedUserId = req.query.userId
+    console.log(req.query)
+    let query = req.query
+    if (query.hasOwnProperty('userId')) {
+        let requestedUserId = query.userId
         MongoClient.connect(url, {useUnifiedTopology: true},
             function (err, client) {
                 if (err) throw err
@@ -27,6 +29,18 @@ router.get('/', function (req, res) {
                 )
             }
         )
+    } else if (Object.keys(query).length === 0 && query.constructor === Object) {
+        MongoClient.connect(url, {useUnifiedTopology: true},
+            function (err, client) {
+                if (err) throw err
+                let db = client.db(dbName)
+                db.collection(contactsCollections).find().toArray(
+                    function (err, result) {
+                        if (err) throw err
+                        res.status(200).json(result)
+                    }
+                )
+            })
     } else {
         res.sendStatus(400)
     }

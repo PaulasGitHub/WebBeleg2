@@ -21,6 +21,7 @@ function displayAllContacts() {
     }
 }
 
+
 function requestOwnContacts() {
     clearContactsView()
     getContactByID(loggedInUser.userId)
@@ -34,7 +35,6 @@ function getContactByID(userId) {
     httpRequest.onerror = function () {
         console.log("Connecting to server with " + url + " failed!\n");
     };
-    //TODO Rename
     httpRequest.onload = displayOwnContacts
     httpRequest.send()
 }
