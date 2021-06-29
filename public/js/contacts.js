@@ -21,6 +21,46 @@ function displayAllContacts() {
     }
 }
 
+function requestAllAccessibleContacts() {
+    clearContactsView()
+    getAllContacts()
+}
+
+function getAllContacts() {
+    let httpRequest = new XMLHttpRequest()
+    let url = "http://localhost:3000/contacts"
+    httpRequest.open("GET", url, true)
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.onerror = function () {
+        console.log("Connecting to server with " + url + " failed!\n");
+    };
+    httpRequest.onload = displayAllAccessibleContacts
+    httpRequest.send()
+}
+
+function displayAllAccessibleContacts() {
+    let data = this.response;
+    let allContacts = JSON.parse(data);
+    if (this.status == 200) {
+        console.log(allContacts)
+        if (loggedInUser.isAdmin) {
+            addContactsAsMarker(allContacts)
+            displayContactArray(allContacts)
+        } else {
+            let allAccessibleContacts = []
+            allContacts.forEach(function (contact) {
+                if (contact.owner == loggedInUser.userId || !contact.private) {
+                    allAccessibleContacts.push(contact)
+                }
+            })
+            addContactsAsMarker(allAccessibleContacts)
+            displayContactArray(allAccessibleContacts)
+        }
+
+    } else {
+        console.log("HTTP-status code was: " + obj.status);
+    }
+}
 
 function requestOwnContacts() {
     clearContactsView()
@@ -43,7 +83,7 @@ function displayOwnContacts() {
     let data = this.response;
     let obj = JSON.parse(data);
     if (this.status == 200) {
-        displayOwnContactsOnMapAsMarkers(obj)
+        addContactsAsMarker(obj)
         displayContactArray(obj)
     } else {
         console.log("HTTP-status code was: " + obj.status);

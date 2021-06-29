@@ -13,6 +13,7 @@ function initMap() {
 }
 
 function addContactsAsMarker(contacts) {
+    deleteMarkers()
     contacts.forEach(function (contact) {
         addMarkerToMap(contact.street + " " + contact.number + " " + contact.zip + " " + contact.city)
     })
