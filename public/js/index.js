@@ -62,7 +62,7 @@ function displayAddContactView() {
     hideHTMLElements('mainContent', 'updateButtonUpdateForm', 'deleteButtonUpdateForm')
 
     if (loggedInUser.isAdmin) {
-        displayHTMLElements('ownerListElement')
+        displayHTMLElements('ownerListElement', 'ownerLabelAddForm', 'ownerSelectAddForm')
     } else {
         hideHTMLElements('ownerListElement')
     }
@@ -74,9 +74,9 @@ function displayAddContactView() {
 function displayChangeContactView() {
     displayHTMLElements('changeContacts', 'updateButtonUpdateForm', 'deleteButtonUpdateForm')
     hideHTMLElements('mainContent', 'saveButton')
-
     if (loggedInUser.isAdmin) {
-        displayHTMLElements('ownerListElement')
+        console.log('isAdmin')
+        displayHTMLElements('ownerListElement', 'ownerLabelAddForm', 'ownerSelectAddForm')
     } else {
         hideHTMLElements('ownerListElement')
     }
