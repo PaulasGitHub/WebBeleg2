@@ -213,18 +213,22 @@ function deleteContact() {
 }
 
 function updateContact() {
-    currentSelectedContact.firstName = document.getElementById("firstNameInputAddForm").value
-    currentSelectedContact.lastName = document.getElementById("lastNameInputAddForm").value
-    currentSelectedContact.street = document.getElementById("streetInputAddForm").value
-    currentSelectedContact.number = document.getElementById("numberInputAddForm").value
-    currentSelectedContact.zip = document.getElementById("zipInputAddForm").value
-    currentSelectedContact.city = document.getElementById("cityInputAddForm").value
-    currentSelectedContact.state = document.getElementById("stateInputAddForm").value
-    currentSelectedContact.country = document.getElementById("countryInputAddForm").value
-    currentSelectedContact.private = document.getElementById("privateCheckAddForm").checked
-    currentSelectedContact.owner = document.getElementById('ownerSelectAddForm').value
-    let validAddress = validateAddress(currentSelectedContact.street + " " + currentSelectedContact.number + " " + currentSelectedContact.zip + " " + currentSelectedContact.city)
+    let newStreet = document.getElementById("streetInputAddForm").value
+    let newNumber = document.getElementById("numberInputAddForm").value
+    let newZip = document.getElementById("zipInputAddForm").value
+    let newCity = document.getElementById("cityInputAddForm").value
+    let validAddress = validateAddress(newStreet + " " + newNumber + " " + newZip + " " + newCity)
     validAddress.then(function (results) {
+        currentSelectedContact.firstName = document.getElementById("firstNameInputAddForm").value
+        currentSelectedContact.lastName = document.getElementById("lastNameInputAddForm").value
+        currentSelectedContact.street = document.getElementById("streetInputAddForm").value
+        currentSelectedContact.number = document.getElementById("numberInputAddForm").value
+        currentSelectedContact.zip = document.getElementById("zipInputAddForm").value
+        currentSelectedContact.city = document.getElementById("cityInputAddForm").value
+        currentSelectedContact.state = document.getElementById("stateInputAddForm").value
+        currentSelectedContact.country = document.getElementById("countryInputAddForm").value
+        currentSelectedContact.private = document.getElementById("privateCheckAddForm").checked
+        currentSelectedContact.owner = document.getElementById('ownerSelectAddForm').value
         let location = results.results[0].geometry.location
         currentSelectedContact.lat = location.lat()
         currentSelectedContact.lng = location.lng()
@@ -248,7 +252,7 @@ function updateContact() {
         let json = JSON.stringify(objectToDelete)
         httpRequest.send(json)
     }).catch(() => {
-        console.error('The given address was not valid')
+        alert('The given address was not valid')
     })
 }
 
