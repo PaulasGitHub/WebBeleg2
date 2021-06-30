@@ -15,7 +15,11 @@ router.post('/login', function (req, res) {
             db.collection(usersCollections)
                 .findOne(loginCredential)
                 .then(result => {
-                    res.json(result)
+                    if (result == null) {
+                        res.status(401).send('Unauthorized')
+                    } else {
+                        res.status(200).json(result)
+                    }
                 })
                 .catch(err => {
                     res.status(401).send('Unauthorized')

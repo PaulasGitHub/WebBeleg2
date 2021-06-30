@@ -39,9 +39,9 @@ function validateUserCredentials(userCredentials) {
 }
 
 function loginValidatedUser(e) {
-    let data = this.response;
-    let obj = JSON.parse(data);
     if (this.status == 200) {
+        let data = this.response;
+        let obj = JSON.parse(data);
         loggedInUser = obj
         hideHTMLElements('login', 'changeContacts')
         displayHTMLElements('mainContent')
@@ -50,7 +50,7 @@ function loginValidatedUser(e) {
         requestOwnContacts()
     } else {
         document.getElementById('errorMessageLogin').innerHTML = "Login credentials where incorrect! Please try again!"
-        console.log("HTTP-status code was: " + obj.status);
+        console.log("HTTP-status code was: " + this.status);
     }
 }
 
@@ -110,3 +110,4 @@ function hideHTMLElements(...args) {
     });
 }
 
+//TODO owner select
