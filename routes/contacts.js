@@ -10,10 +10,10 @@ const contactsCollections = 'contacts'
 router.get('/:id', function (req, res) {
     let contactId = req.params.id;
     MongoClient.connect(url, {useUnifiedTopology: true}, function (err, client) {
-        if (err) throw err
+        if (err) res.status(400).send('Something bad happened: ' + err.message)
         let db = client.db(dbName);
         db.collection(contactsCollections).findOne({_id: ObjectId(contactId)}, function (err, result) {
-            if (err) throw err
+            if (err) res.status(400).send('Something bad happened: ' + err.message)
             res.status(200).json(result)
             client.close()
         })
@@ -26,11 +26,11 @@ router.get('/', function (req, res) {
         let requestedUserId = query.userId
         MongoClient.connect(url, {useUnifiedTopology: true},
             function (err, client) {
-                if (err) throw err
+                if (err) res.status(400).send('Something bad happened: ' + err.message)
                 let db = client.db(dbName);
                 db.collection(contactsCollections).find({owner: requestedUserId}).toArray(
                     function (err, result) {
-                        if (err) throw err
+                        if (err) res.status(400).send('Something bad happened: ' + err.message)
                         if (result.length == 0) {
                             res.sendStatus(404)
                         } else {
@@ -44,11 +44,11 @@ router.get('/', function (req, res) {
     } else if (Object.keys(query).length === 0 && query.constructor === Object) {
         MongoClient.connect(url, {useUnifiedTopology: true},
             function (err, client) {
-                if (err) throw err
+                if (err) res.status(400).send('Something bad happened: ' + err.message)
                 let db = client.db(dbName)
                 db.collection(contactsCollections).find().toArray(
                     function (err, result) {
-                        if (err) throw err
+                        if (err) res.status(400).send('Something bad happened: ' + err.message)
                         res.status(200).json(result)
                     }
                 )
@@ -62,10 +62,10 @@ router.get('/', function (req, res) {
 router.post('/', function (req, res) {
     MongoClient.connect(url, {useUnifiedTopology: true},
         function (err, client) {
-            if (err) throw err
+            if (err) res.status(400).send('Something bad happened: ' + err.message)
             let db = client.db(dbName);
             db.collection(contactsCollections).insertOne(req.body, function (err, result) {
-                if (err) throw err
+                if (err) res.status(400).send('Something bad happened: ' + err.message)
                 else {
                     res.location('/contacts/' + result.insertedId)
                     res.sendStatus(201);
@@ -80,10 +80,10 @@ router.post('/', function (req, res) {
 router.delete('/:id', function (req, res) {
     let contactId = req.params.id;
     MongoClient.connect(url, {useUnifiedTopology: true}, function (err, client) {
-        if (err) throw err
+        if (err) res.status(400).send('Something bad happened: ' + err.message)
         let db = client.db(dbName);
         db.collection(contactsCollections).deleteOne({_id: ObjectId(contactId)}, function (err, result) {
-            if (err) throw err
+            if (err) res.status(400).send('Something bad happened: ' + err.message)
             res.sendStatus(204)
             client.close()
         })
@@ -93,12 +93,12 @@ router.delete('/:id', function (req, res) {
 router.put('/:id', function (req, res) {
     let contactId = req.params.id;
     MongoClient.connect(url, {useUnifiedTopology: true}, function (err, client) {
-        if (err) throw err
+        if (err) res.status(400).send('Something bad happened: ' + err.message)
         let query = {_id: ObjectId(contactId)}
         let updatedContact = req.body
         let db = client.db(dbName)
         db.collection(contactsCollections).updateOne(query, {$set: updatedContact}, function (err, result) {
-            if (err) throw err
+            if (err) res.status(400).send('Something bad happened: ' + err.message)
             res.sendStatus(204)
             client.close()
         })
