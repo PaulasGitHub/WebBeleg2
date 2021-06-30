@@ -60,7 +60,6 @@ function loginValidatedUser(e) {
 function displayAddContactView() {
     displayHTMLElements('changeContacts', 'saveButton')
     hideHTMLElements('mainContent', 'updateButtonUpdateForm', 'deleteButtonUpdateForm')
-
     if (loggedInUser.isAdmin) {
         displayHTMLElements('ownerListElement', 'ownerLabelAddForm', 'ownerSelectAddForm')
     } else {
@@ -75,7 +74,6 @@ function displayChangeContactView() {
     displayHTMLElements('changeContacts', 'updateButtonUpdateForm', 'deleteButtonUpdateForm')
     hideHTMLElements('mainContent', 'saveButton')
     if (loggedInUser.isAdmin) {
-        console.log('isAdmin')
         displayHTMLElements('ownerListElement', 'ownerLabelAddForm', 'ownerSelectAddForm')
     } else {
         hideHTMLElements('ownerListElement')

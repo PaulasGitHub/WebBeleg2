@@ -161,7 +161,7 @@ function addContact() {
             newContact.lng = location.lng()
             postNewContact(newContact)
         })
-        .catch(error => {
+        .catch(() => {
             console.error('The given address was not valid')
         })
 }
@@ -223,24 +223,32 @@ function updateContact() {
     currentSelectedContact.country = document.getElementById("countryInputAddForm").value
     currentSelectedContact.private = document.getElementById("privateCheckAddForm").checked
     currentSelectedContact.owner = document.getElementById('ownerSelectAddForm').value
-    let httpRequest = new XMLHttpRequest();
-    let url = "http://localhost:3000/contacts/" + currentSelectedContact._id
-    httpRequest.open("PUT", url, true)
-    httpRequest.setRequestHeader("Content-Type", "application/json");
-    httpRequest.onerror = function () {
-        console.log("Connecting to server with " + url + " failed!\n");
-    };
-    httpRequest.onload = function () {
-        if (this.status == 204) {
-            requestOwnContacts()
-            displayMapView()
-        } else {
-            console.log("HTTP-status code was: " + this.status);
+    let validAddress = validateAddress(currentSelectedContact.street + " " + currentSelectedContact.number + " " + currentSelectedContact.zip + " " + currentSelectedContact.city)
+    validAddress.then(function (results) {
+        let location = results.results[0].geometry.location
+        currentSelectedContact.lat = location.lat()
+        currentSelectedContact.lng = location.lng()
+        let httpRequest = new XMLHttpRequest();
+        let url = "http://localhost:3000/contacts/" + currentSelectedContact._id
+        httpRequest.open("PUT", url, true)
+        httpRequest.setRequestHeader("Content-Type", "application/json");
+        httpRequest.onerror = function () {
+            console.log("Connecting to server with " + url + " failed!\n");
+        };
+        httpRequest.onload = function () {
+            if (this.status == 204) {
+                requestOwnContacts()
+                displayMapView()
+            } else {
+                console.log("HTTP-status code was: " + this.status);
+            }
         }
-    }
-    let objectToDelete = currentSelectedContact
-    delete objectToDelete._id
-    let json = JSON.stringify(objectToDelete)
-    httpRequest.send(json)
+        let objectToDelete = currentSelectedContact
+        delete objectToDelete._id
+        let json = JSON.stringify(objectToDelete)
+        httpRequest.send(json)
+    }).catch(() => {
+        console.error('The given address was not valid')
+    })
 }
 
