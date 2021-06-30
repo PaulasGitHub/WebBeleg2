@@ -15,24 +15,19 @@ function initMap() {
 function addContactsAsMarker(contacts) {
     deleteMarkers()
     contacts.forEach(function (contact) {
-        addMarkerToMap(contact.street + " " + contact.number + " " + contact.zip + " " + contact.city)
+        addMarkerToMap(contact)
     })
 
 }
 
 function addMarkerToMap(address) {
-    geocoder.geocode({'address': address}, function (results, status) {
-        if (status === 'OK') {
-            map.setCenter(results[0].geometry.location);
-            let marker = new google.maps.Marker({
-                map: map,
-                position: results[0].geometry.location
-            });
-            markers.push(marker)
-        } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-        }
-    });
+    let latLng = {lat: address.lat, lng: address.lng}
+    map.setCenter(latLng)
+    let marker = new google.maps.Marker({
+        map: map,
+        position: latLng
+    })
+    markers.push(marker)
 }
 
 function validateAddress(address) {

@@ -132,7 +132,10 @@ function addContactNEW() {
     }
     let validAddress = validateAddress(newContact.street + " " + newContact.number + " " + newContact.zip + " " + newContact.city)
     validAddress
-        .then(function () {
+        .then(function (results) {
+            let location = results.results[0].geometry.location
+            newContact.lat = location.lat()
+            newContact.lng = location.lng()
             postNewContact(newContact)
         })
         .catch(error => {
