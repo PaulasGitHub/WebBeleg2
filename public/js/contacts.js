@@ -1,4 +1,4 @@
-let currentSelectedContactID
+let currentSelectedContact
 
 function requestAllAccessibleContacts() {
     clearContactsView()
@@ -42,10 +42,10 @@ function displayAllAccessibleContacts() {
 
 function requestOwnContacts() {
     clearContactsView()
-    getContactByID(loggedInUser.userId)
+    requestContactByUserId(loggedInUser.userId)
 }
 
-function getContactByID(userId) {
+function requestContactByUserId(userId) {
     let httpRequest = new XMLHttpRequest();
     let url = "http://localhost:3000/contacts?userId=" + userId
     httpRequest.open("GET", url, true)
@@ -79,26 +79,49 @@ function displayContactArray(contacts) {
     });
 }
 
-function displayChangeContact(event) {
-    let contactWithOwner = getContactByID(event.target.id)
-    if (loggedInUser.isAdmin || (!loggedInUser.isAdmin && loggedInUser.userId == contactWithOwner.owner)) {
-        displayChangeContactView()
-        if (!loggedInUser.isAdmin) {
-            hideHTMLElements('ownerSelectAddForm', 'ownerLabelAddForm')
+
+function requestContactById(id) {
+    let httpRequest = new XMLHttpRequest();
+    let url = "http://localhost:3000/contacts/" + id
+    httpRequest.open("GET", url, true)
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.onerror = function () {
+        console.log("Connecting to server with " + url + " failed!\n");
+    };
+    httpRequest.onload = displaySelectedContact
+    httpRequest.send()
+}
+
+function displaySelectedContact() {
+    let data = this.response;
+    let selectedContact = JSON.parse(data);
+    if (this.status == 200) {
+        if (loggedInUser.isAdmin || (!loggedInUser.isAdmin && loggedInUser.userId == selectedContact.owner)) {
+            displayChangeContactView()
+            if (!loggedInUser.isAdmin) {
+                hideHTMLElements('ownerSelectAddForm', 'ownerLabelAddForm')
+            }
+            document.getElementById('firstNameInputAddForm').value = selectedContact.firstName
+            document.getElementById('lastNameInputAddForm').value = selectedContact.lastName
+            document.getElementById('streetInputAddForm').value = selectedContact.street
+            document.getElementById('numberInputAddForm').value = selectedContact.number
+            document.getElementById('zipInputAddForm').value = selectedContact.zip
+            document.getElementById('cityInputAddForm').value = selectedContact.city
+            document.getElementById('zipInputAddForm').value = selectedContact.zip
+            document.getElementById('stateInputAddForm').value = selectedContact.state
+            document.getElementById('countryInputAddForm').value = selectedContact.country
+            document.getElementById('privateCheckAddForm').checked = selectedContact.private
+            document.getElementById('ownerSelectAddForm').value = selectedContact.owner
+            currentSelectedContact = selectedContact
         }
-        document.getElementById('firstNameInputAddForm').value = contactWithOwner.contact.firstName
-        document.getElementById('lastNameInputAddForm').value = contactWithOwner.contact.lastName
-        document.getElementById('streetInputAddForm').value = contactWithOwner.contact.street
-        document.getElementById('numberInputAddForm').value = contactWithOwner.contact.number
-        document.getElementById('zipInputAddForm').value = contactWithOwner.contact.zip
-        document.getElementById('cityInputAddForm').value = contactWithOwner.contact.city
-        document.getElementById('zipInputAddForm').value = contactWithOwner.contact.zip
-        document.getElementById('stateInputAddForm').value = contactWithOwner.contact.state
-        document.getElementById('countryInputAddForm').value = contactWithOwner.contact.country
-        document.getElementById('privateCheckAddForm').checked = contactWithOwner.contact.private
-        document.getElementById('ownerSelectAddForm').value = contactWithOwner.owner
-        currentSelectedContactID = contactWithOwner.contact.id
+    } else {
+        console.log("HTTP-status code was: " + selectedContact.status);
     }
+}
+
+
+function displayChangeContact(event) {
+    requestContactById(event.target.id)
 }
 
 /**
@@ -108,13 +131,13 @@ function displayChangeContact(event) {
  */
 function addContactListElement(contactList, contact) {
     let listElement = document.createElement("p");
-    listElement.setAttribute("id", contact.id)
+    listElement.setAttribute("id", contact._id)
     listElement.innerHTML = contact.firstName + " " + contact.lastName
     listElement.addEventListener("click", displayChangeContact)
     contactList.appendChild(listElement)
 }
 
-function addContactNEW() {
+function addContact() {
     let newContact = {}
     readContactInput(newContact, "firstNameInputAddForm", 'firstName')
     readContactInput(newContact, "lastNameInputAddForm", 'lastName')
@@ -159,39 +182,6 @@ function postNewContact(newContact) {
     httpRequest.send(json)
 }
 
-function addContact() {
-    let newContact = {}
-    newContact.id = nextID++
-    readContactInput(newContact, "firstNameInputAddForm", 'firstName')
-    readContactInput(newContact, "lastNameInputAddForm", 'lastName')
-    readContactInput(newContact, "streetInputAddForm", 'street')
-    readContactInput(newContact, "numberInputAddForm", 'number')
-    readContactInput(newContact, "zipInputAddForm", 'zip')
-    readContactInput(newContact, "cityInputAddForm", 'city')
-    readContactInput(newContact, "stateInputAddForm", 'state')
-    readContactInput(newContact, "countryInputAddForm", 'country')
-    newContact["private"] = document.getElementById("privateCheckAddForm").checked
-    let validAddress = validateAddress(newContact.street + " " + newContact.number + " " + newContact.zip + " " + newContact.city)
-    validAddress.then(function () {
-        if (!loggedInUser.isAdmin) {
-            loggedInUser.contacts.push(newContact)
-        } else if (loggedInUser.isAdmin) {
-            if (document.getElementById('ownerSelectAddForm').value == 'admina')
-                loggedInUser.contacts.push(newContact)
-            else {
-                let newArray = users.filter(function (user) {
-                    return user.userId == 'normalo'
-                });
-                newArray[0].contacts.push(newContact)
-            }
-        }
-    }).catch(error => {
-        console.error('The given address was not valid')
-    })
-    requestOwnContacts()
-    displayMapView()
-}
-
 function readContactInput(newContact, inputID, attributeName) {
     newContact[attributeName] = document.getElementById(inputID).value
 }
@@ -204,23 +194,28 @@ function clearContactsView() {
 }
 
 function deleteContact() {
-    let deletedUser
-    users.forEach(function (user) {
-        user.contacts.forEach(function (contact, index) {
-            if (contact.id == currentSelectedContactID) {
-                deletedUser = user.contacts.splice(index, 1)[0]
-            }
-        })
-    })
-    requestOwnContacts()
-    displayMapView()
-    return deletedUser
+    let httpRequest = new XMLHttpRequest();
+    let url = "http://localhost:3000/contacts/" + currentSelectedContact._id
+    httpRequest.open("DELETE", url, true)
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.onerror = function () {
+        console.log("Connecting to server with " + url + " failed!\n");
+    };
+    httpRequest.onload = function () {
+        if (this.status == 204) {
+            requestOwnContacts()
+            displayMapView()
+        } else {
+            console.log("HTTP-status code was: " + this.status);
+        }
+    }
+    httpRequest.send()
 }
 
 function updateContact() {
     users.forEach(function (user) {
         user.contacts.forEach(function (contact, index) {
-            if (contact.id == currentSelectedContactID) {
+            if (contact.id == currentSelectedContact.id) {
                 contact.firstName = document.getElementById("firstNameInputAddForm").value
                 contact.lastName = document.getElementById("lastNameInputAddForm").value
                 contact.street = document.getElementById("streetInputAddForm").value

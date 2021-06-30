@@ -7,6 +7,19 @@ const url = "mongodb://localhost:27017/";
 const dbName = 'advizDB'
 const contactsCollections = 'contacts'
 
+router.get('/:id', function (req, res) {
+    let contactId = req.params.id;
+    MongoClient.connect(url, {useUnifiedTopology: true}, function (err, client) {
+        if (err) throw err
+        let db = client.db(dbName);
+        db.collection(contactsCollections).findOne({_id: ObjectId(contactId)}, function (err, result) {
+            if (err) throw err
+            res.status(200).json(result)
+            client.close()
+        })
+    })
+})
+
 router.get('/', function (req, res) {
     let query = req.query
     if (query.hasOwnProperty('userId')) {
