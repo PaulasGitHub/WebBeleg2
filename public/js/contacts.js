@@ -213,41 +213,34 @@ function deleteContact() {
 }
 
 function updateContact() {
-    users.forEach(function (user) {
-        user.contacts.forEach(function (contact, index) {
-            if (contact.id == currentSelectedContact.id) {
-                contact.firstName = document.getElementById("firstNameInputAddForm").value
-                contact.lastName = document.getElementById("lastNameInputAddForm").value
-                contact.street = document.getElementById("streetInputAddForm").value
-                contact.number = document.getElementById("numberInputAddForm").value
-                contact.zip = document.getElementById("zipInputAddForm").value
-                contact.city = document.getElementById("cityInputAddForm").value
-                contact.state = document.getElementById("stateInputAddForm").value
-                contact.country = document.getElementById("countryInputAddForm").value
-                contact.private = document.getElementById("privateCheckAddForm").checked
-                let selectedOwnerValue = document.getElementById('ownerSelectAddForm').value
-                if (loggedInUser.isAdmin && user.userId != selectedOwnerValue) {
-                    let deletedContact = deleteContact()
-                    users.find(user => user.userId == selectedOwnerValue).contacts.push(deletedContact)
-                }
-            }
-        })
-    })
-    requestOwnContacts()
-    displayMapView()
-}
-
-function addressCorrect() {
-    let addCorrect = false;
-
-    geocoder.geocode({'address': address}, function (results, status) {
-        if (status === 'OK') {
-            addCorrect = true
+    currentSelectedContact.firstName = document.getElementById("firstNameInputAddForm").value
+    currentSelectedContact.lastName = document.getElementById("lastNameInputAddForm").value
+    currentSelectedContact.street = document.getElementById("streetInputAddForm").value
+    currentSelectedContact.number = document.getElementById("numberInputAddForm").value
+    currentSelectedContact.zip = document.getElementById("zipInputAddForm").value
+    currentSelectedContact.city = document.getElementById("cityInputAddForm").value
+    currentSelectedContact.state = document.getElementById("stateInputAddForm").value
+    currentSelectedContact.country = document.getElementById("countryInputAddForm").value
+    currentSelectedContact.private = document.getElementById("privateCheckAddForm").checked
+    currentSelectedContact.owner = document.getElementById('ownerSelectAddForm').value
+    let httpRequest = new XMLHttpRequest();
+    let url = "http://localhost:3000/contacts/" + currentSelectedContact._id
+    httpRequest.open("PUT", url, true)
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.onerror = function () {
+        console.log("Connecting to server with " + url + " failed!\n");
+    };
+    httpRequest.onload = function () {
+        if (this.status == 204) {
+            requestOwnContacts()
+            displayMapView()
         } else {
-            addCorrect = false
+            console.log("HTTP-status code was: " + this.status);
         }
-    })
-    print(addCorrect)
-    return addCorrect
+    }
+    let objectToDelete = currentSelectedContact
+    delete objectToDelete._id
+    let json = JSON.stringify(objectToDelete)
+    httpRequest.send(json)
 }
 
