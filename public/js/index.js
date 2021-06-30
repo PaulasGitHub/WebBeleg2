@@ -108,4 +108,15 @@ function hideHTMLElements(...args) {
     });
 }
 
+function resetContactInputs() {
+    document.getElementById("firstNameInputAddForm").value = null
+    document.getElementById("lastNameInputAddForm").value = null
+    document.getElementById("streetInputAddForm").value = null
+    document.getElementById("numberInputAddForm").value = null
+    document.getElementById("zipInputAddForm").value = null
+    document.getElementById("cityInputAddForm").value = null
+    document.getElementById("stateInputAddForm").value = null
+    document.getElementById("countryInputAddForm").value = null
+}
+
 //TODO owner select

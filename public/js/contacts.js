@@ -177,6 +177,7 @@ function postNewContact(newContact) {
     httpRequest.onload = function () {
         requestOwnContacts()
         displayMapView()
+        resetContactInputs()
     }
     let json = JSON.stringify(newContact)
     httpRequest.send(json)
@@ -205,6 +206,7 @@ function deleteContact() {
         if (this.status == 204) {
             requestOwnContacts()
             displayMapView()
+            resetContactInputs()
         } else {
             console.log("HTTP-status code was: " + this.status);
         }
@@ -243,6 +245,7 @@ function updateContact() {
             if (this.status == 204) {
                 requestOwnContacts()
                 displayMapView()
+                resetContactInputs()
             } else {
                 console.log("HTTP-status code was: " + this.status);
             }
