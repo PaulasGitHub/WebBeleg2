@@ -7,7 +7,6 @@
     <script src="js/map.js"></script>
     <script src="js/index.js"></script>
     <script src="js/contacts.js"></script>
-    <script src="js/model.js"></script>
 </head>
 <body onload="initApp()">
 <div class="projectTitle">
@@ -45,8 +44,8 @@
         </div>
         <br>
         <div>
-            <button id="myContactsButton" type="button" onclick="displayOwnContacts()">My Contacts</button>
-            <button id="allContactsButton" type="button" onclick="displayAllContacts()">All Contacts</button>
+            <button id="myContactsButton" type="button" onclick="requestOwnContacts()">My Contacts</button>
+            <button id="allContactsButton" type="button" onclick="requestAllAccessibleContacts()">All Contacts</button>
             <button id="addContactButton" type="button" onclick="displayAddContactView()">Add Contact</button>
         </div>
     </div>

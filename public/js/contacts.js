@@ -1,33 +1,71 @@
-let currentSelectedContactID
+let currentSelectedContact
 
-/**
- * Display all contacts depending on the currently logged in role
- */
-function displayAllContacts() {
+function requestAllAccessibleContacts() {
     clearContactsView()
-    displayAllContactsOnMapAsMarkers()
-    if (loggedInUser.isAdmin) {
-        users.forEach(function (user) {
-            displayContactArray(user.contacts)
-        })
+    getAllContacts()
+}
+
+function getAllContacts() {
+    let httpRequest = new XMLHttpRequest()
+    let url = "http://localhost:3000/contacts"
+    httpRequest.open("GET", url, true)
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.onerror = function () {
+        console.log("Connecting to server with " + url + " failed!\n");
+    };
+    httpRequest.onload = displayAllAccessibleContacts
+    httpRequest.send()
+}
+
+function displayAllAccessibleContacts() {
+    let data = this.response;
+    let allContacts = JSON.parse(data);
+    if (this.status == 200) {
+        if (loggedInUser.isAdmin) {
+            addContactsAsMarker(allContacts)
+            displayContactArray(allContacts)
+        } else {
+            let allAccessibleContacts = []
+            allContacts.forEach(function (contact) {
+                if (contact.owner == loggedInUser.userId || !contact.private) {
+                    allAccessibleContacts.push(contact)
+                }
+            })
+            addContactsAsMarker(allAccessibleContacts)
+            displayContactArray(allAccessibleContacts)
+        }
+
     } else {
-        users.forEach(function (user) {
-            if (user.userId === loggedInUser.userId) {
-                displayContactArray(user.contacts)
-            } else {
-                displayPublicContactsFromArray(user.contacts)
-            }
-        })
+        console.log("HTTP-status code was: " + obj.status);
     }
 }
 
-/**
- * Display only contacts from currently logged in user
- */
-function displayOwnContacts() {
+function requestOwnContacts() {
     clearContactsView()
-    displayOwnContactsOnMapAsMarkers()
-    displayContactArray(loggedInUser.contacts)
+    requestContactByUserId(loggedInUser.userId)
+}
+
+function requestContactByUserId(userId) {
+    let httpRequest = new XMLHttpRequest();
+    let url = "http://localhost:3000/contacts?userId=" + userId
+    httpRequest.open("GET", url, true)
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.onerror = function () {
+        console.log("Connecting to server with " + url + " failed!\n");
+    };
+    httpRequest.onload = displayOwnContacts
+    httpRequest.send()
+}
+
+function displayOwnContacts() {
+    let data = this.response;
+    let obj = JSON.parse(data);
+    if (this.status == 200) {
+        addContactsAsMarker(obj)
+        displayContactArray(obj)
+    } else {
+        console.log("HTTP-status code was: " + obj.status);
+    }
 }
 
 /**
@@ -41,54 +79,49 @@ function displayContactArray(contacts) {
     });
 }
 
-/**
- * Display only contacts from a given contact array where the private attribute is set to false
- * @param contacts given contact array
- */
-function displayPublicContactsFromArray(contacts) {
-    let contactDiv = document.getElementById('contactsDiv')
-    contacts.forEach(function (contact) {
-        if (!contact.private) {
-            addContactListElement(contactDiv, contact)
-        }
-    })
+
+function requestContactById(id) {
+    let httpRequest = new XMLHttpRequest();
+    let url = "http://localhost:3000/contacts/" + id
+    httpRequest.open("GET", url, true)
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.onerror = function () {
+        console.log("Connecting to server with " + url + " failed!\n");
+    };
+    httpRequest.onload = displaySelectedContact
+    httpRequest.send()
 }
 
-function displayChangeContact(event) {
-    let contactWithOwner = getContactByID(event.target.id)
-    if (loggedInUser.isAdmin || (!loggedInUser.isAdmin && loggedInUser.userId == contactWithOwner.owner)) {
-        displayChangeContactView()
-        if (!loggedInUser.isAdmin) {
-            hideHTMLElements('ownerSelectAddForm', 'ownerLabelAddForm')
+function displaySelectedContact() {
+    let data = this.response;
+    let selectedContact = JSON.parse(data);
+    if (this.status == 200) {
+        if (loggedInUser.isAdmin || (!loggedInUser.isAdmin && loggedInUser.userId == selectedContact.owner)) {
+            displayChangeContactView()
+            if (!loggedInUser.isAdmin) {
+                hideHTMLElements('ownerSelectAddForm', 'ownerLabelAddForm')
+            }
+            document.getElementById('firstNameInputAddForm').value = selectedContact.firstName
+            document.getElementById('lastNameInputAddForm').value = selectedContact.lastName
+            document.getElementById('streetInputAddForm').value = selectedContact.street
+            document.getElementById('numberInputAddForm').value = selectedContact.number
+            document.getElementById('zipInputAddForm').value = selectedContact.zip
+            document.getElementById('cityInputAddForm').value = selectedContact.city
+            document.getElementById('zipInputAddForm').value = selectedContact.zip
+            document.getElementById('stateInputAddForm').value = selectedContact.state
+            document.getElementById('countryInputAddForm').value = selectedContact.country
+            document.getElementById('privateCheckAddForm').checked = selectedContact.private
+            document.getElementById('ownerSelectAddForm').value = selectedContact.owner
+            currentSelectedContact = selectedContact
         }
-        document.getElementById('firstNameInputAddForm').value = contactWithOwner.contact.firstName
-        document.getElementById('lastNameInputAddForm').value = contactWithOwner.contact.lastName
-        document.getElementById('streetInputAddForm').value = contactWithOwner.contact.street
-        document.getElementById('numberInputAddForm').value = contactWithOwner.contact.number
-        document.getElementById('zipInputAddForm').value = contactWithOwner.contact.zip
-        document.getElementById('cityInputAddForm').value = contactWithOwner.contact.city
-        document.getElementById('zipInputAddForm').value = contactWithOwner.contact.zip
-        document.getElementById('stateInputAddForm').value = contactWithOwner.contact.state
-        document.getElementById('countryInputAddForm').value = contactWithOwner.contact.country
-        document.getElementById('privateCheckAddForm').checked = contactWithOwner.contact.private
-        document.getElementById('ownerSelectAddForm').value = contactWithOwner.owner
-        currentSelectedContactID = contactWithOwner.contact.id
+    } else {
+        console.log("HTTP-status code was: " + selectedContact.status);
     }
 }
 
-function getContactByID(id) {
-    let contactWithOwner
-    users.forEach(function (user) {
-        user.contacts.forEach(function (contact) {
-            if (contact.id == id) {
-                contactWithOwner = {
-                    owner: user.userId,
-                    contact: contact
-                }
-            }
-        })
-    })
-    return contactWithOwner
+
+function displayChangeContact(event) {
+    requestContactById(event.target.id)
 }
 
 /**
@@ -98,7 +131,7 @@ function getContactByID(id) {
  */
 function addContactListElement(contactList, contact) {
     let listElement = document.createElement("p");
-    listElement.setAttribute("id", contact.id)
+    listElement.setAttribute("id", contact._id)
     listElement.innerHTML = contact.firstName + " " + contact.lastName
     listElement.addEventListener("click", displayChangeContact)
     contactList.appendChild(listElement)
@@ -106,7 +139,6 @@ function addContactListElement(contactList, contact) {
 
 function addContact() {
     let newContact = {}
-    newContact.id = nextID++
     readContactInput(newContact, "firstNameInputAddForm", 'firstName')
     readContactInput(newContact, "lastNameInputAddForm", 'lastName')
     readContactInput(newContact, "streetInputAddForm", 'street')
@@ -116,25 +148,38 @@ function addContact() {
     readContactInput(newContact, "stateInputAddForm", 'state')
     readContactInput(newContact, "countryInputAddForm", 'country')
     newContact["private"] = document.getElementById("privateCheckAddForm").checked
+    if (loggedInUser.isAdmin) {
+        newContact.owner = document.getElementById('ownerSelectAddForm').value
+    } else {
+        newContact.owner = loggedInUser.userId
+    }
     let validAddress = validateAddress(newContact.street + " " + newContact.number + " " + newContact.zip + " " + newContact.city)
-    validAddress.then(function () {
-        if (!loggedInUser.isAdmin) {
-            loggedInUser.contacts.push(newContact)
-        } else if (loggedInUser.isAdmin) {
-            if (document.getElementById('ownerSelectAddForm').value == 'admina')
-                loggedInUser.contacts.push(newContact)
-            else {
-                let newArray = users.filter(function (user) {
-                    return user.userId == 'normalo'
-                });
-                newArray[0].contacts.push(newContact)
-            }
-        }
-    }).catch(error => {
-        console.error('The given address was not valid')
-    })
-    displayOwnContacts()
-    displayMapView()
+    validAddress
+        .then(function (results) {
+            let location = results.results[0].geometry.location
+            newContact.lat = location.lat()
+            newContact.lng = location.lng()
+            postNewContact(newContact)
+        })
+        .catch(error => {
+            console.error('The given address was not valid')
+        })
+}
+
+function postNewContact(newContact) {
+    let httpRequest = new XMLHttpRequest();
+    let url = "http://localhost:3000/contacts"
+    httpRequest.open("POST", url, true)
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.onerror = function () {
+        console.log("Connecting to server with " + url + " failed!\n");
+    };
+    httpRequest.onload = function () {
+        requestOwnContacts()
+        displayMapView()
+    }
+    let json = JSON.stringify(newContact)
+    httpRequest.send(json)
 }
 
 function readContactInput(newContact, inputID, attributeName) {
@@ -149,55 +194,53 @@ function clearContactsView() {
 }
 
 function deleteContact() {
-    let deletedUser
-    users.forEach(function (user) {
-        user.contacts.forEach(function (contact, index) {
-            if (contact.id == currentSelectedContactID) {
-                deletedUser = user.contacts.splice(index, 1)[0]
-            }
-        })
-    })
-    displayMapView()
-    displayOwnContacts()
-    return deletedUser
+    let httpRequest = new XMLHttpRequest();
+    let url = "http://localhost:3000/contacts/" + currentSelectedContact._id
+    httpRequest.open("DELETE", url, true)
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.onerror = function () {
+        console.log("Connecting to server with " + url + " failed!\n");
+    };
+    httpRequest.onload = function () {
+        if (this.status == 204) {
+            requestOwnContacts()
+            displayMapView()
+        } else {
+            console.log("HTTP-status code was: " + this.status);
+        }
+    }
+    httpRequest.send()
 }
 
 function updateContact() {
-    users.forEach(function (user) {
-        user.contacts.forEach(function (contact, index) {
-            if (contact.id == currentSelectedContactID) {
-                contact.firstName = document.getElementById("firstNameInputAddForm").value
-                contact.lastName = document.getElementById("lastNameInputAddForm").value
-                contact.street = document.getElementById("streetInputAddForm").value
-                contact.number = document.getElementById("numberInputAddForm").value
-                contact.zip = document.getElementById("zipInputAddForm").value
-                contact.city = document.getElementById("cityInputAddForm").value
-                contact.state = document.getElementById("stateInputAddForm").value
-                contact.country = document.getElementById("countryInputAddForm").value
-                contact.private = document.getElementById("privateCheckAddForm").checked
-                let selectedOwnerValue = document.getElementById('ownerSelectAddForm').value
-                if (loggedInUser.isAdmin && user.userId != selectedOwnerValue) {
-                    let deletedContact = deleteContact()
-                    users.find(user => user.userId == selectedOwnerValue).contacts.push(deletedContact)
-                }
-            }
-        })
-    })
-    displayMapView()
-    displayOwnContacts()
-}
-
-function addressCorrect() {
-    let addCorrect = false;
-
-    geocoder.geocode({'address': address}, function (results, status) {
-        if (status === 'OK') {
-            addCorrect = true
+    currentSelectedContact.firstName = document.getElementById("firstNameInputAddForm").value
+    currentSelectedContact.lastName = document.getElementById("lastNameInputAddForm").value
+    currentSelectedContact.street = document.getElementById("streetInputAddForm").value
+    currentSelectedContact.number = document.getElementById("numberInputAddForm").value
+    currentSelectedContact.zip = document.getElementById("zipInputAddForm").value
+    currentSelectedContact.city = document.getElementById("cityInputAddForm").value
+    currentSelectedContact.state = document.getElementById("stateInputAddForm").value
+    currentSelectedContact.country = document.getElementById("countryInputAddForm").value
+    currentSelectedContact.private = document.getElementById("privateCheckAddForm").checked
+    currentSelectedContact.owner = document.getElementById('ownerSelectAddForm').value
+    let httpRequest = new XMLHttpRequest();
+    let url = "http://localhost:3000/contacts/" + currentSelectedContact._id
+    httpRequest.open("PUT", url, true)
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.onerror = function () {
+        console.log("Connecting to server with " + url + " failed!\n");
+    };
+    httpRequest.onload = function () {
+        if (this.status == 204) {
+            requestOwnContacts()
+            displayMapView()
         } else {
-            addCorrect = false
+            console.log("HTTP-status code was: " + this.status);
         }
-    })
-    print(addCorrect)
-    return addCorrect
+    }
+    let objectToDelete = currentSelectedContact
+    delete objectToDelete._id
+    let json = JSON.stringify(objectToDelete)
+    httpRequest.send(json)
 }
 

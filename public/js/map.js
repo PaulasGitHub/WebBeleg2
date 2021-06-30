@@ -1,7 +1,6 @@
 let map
 let geocoder
 let markers = []
-let addressOK
 
 function initMap() {
     map = new google.maps.Map(document.getElementById("googleMap"),
@@ -14,37 +13,21 @@ function initMap() {
 }
 
 function addContactsAsMarker(contacts) {
+    deleteMarkers()
     contacts.forEach(function (contact) {
-        addMarkerToMap(contact.street + " " + contact.number + " " + contact.zip + " " + contact.city)
+        addMarkerToMap(contact)
     })
 
 }
 
 function addMarkerToMap(address) {
-    geocoder.geocode({'address': address}, function (results, status) {
-        if (status === 'OK') {
-            map.setCenter(results[0].geometry.location);
-            let marker = new google.maps.Marker({
-                map: map,
-                position: results[0].geometry.location
-
-            });
-            markers.push(marker)
-        } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-
-        }
+    let latLng = {lat: address.lat, lng: address.lng}
+    map.setCenter(latLng)
+    let marker = new google.maps.Marker({
+        map: map,
+        position: latLng
     })
-}
-
-function checkAddress(address) {
-    geocoder.geocode({'address': address}, function (results, status) {
-        if (status === 'OK') {
-           addressOK = true
-        } else {
-            addressOK = false
-        }
-    })
+    markers.push(marker)
 }
 
 function validateAddress(address) {
@@ -53,34 +36,6 @@ function validateAddress(address) {
             alert('Geocode was not successful for the following reason: ' + status);
         }
     });
-}
-
-function displayOwnContactsOnMapAsMarkers() {
-    deleteMarkers()
-    addContactsAsMarker(loggedInUser.contacts)
-}
-
-function displayAllContactsOnMapAsMarkers() {
-    deleteMarkers()
-    let currentUserIsAdmin = loggedInUser.isAdmin
-    if (currentUserIsAdmin) {
-        users.forEach(function (user) {
-            addContactsAsMarker(user.contacts)
-        })
-    } else {
-        users.forEach(function (user) {
-            if (user.userId === loggedInUser.userId) {
-                addContactsAsMarker(user.contacts)
-            } else {
-                showPublicContactsOnMapAsMarkers(user.contacts)
-            }
-        })
-    }
-}
-
-function showPublicContactsOnMapAsMarkers(contacts) {
-    let publicContacts = contacts.filter(contact => !contact.private)
-    addContactsAsMarker(publicContacts)
 }
 
 // Deletes all markers in the array by removing references to them.
