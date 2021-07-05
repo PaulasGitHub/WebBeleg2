@@ -161,7 +161,7 @@ function addContact() {
             newContact.lng = location.lng()
             postNewContact(newContact)
         })
-        .catch(error => {
+        .catch(() => {
             console.error('The given address was not valid')
         })
 }
@@ -177,6 +177,7 @@ function postNewContact(newContact) {
     httpRequest.onload = function () {
         requestOwnContacts()
         displayMapView()
+        resetContactInputs()
     }
     let json = JSON.stringify(newContact)
     httpRequest.send(json)
@@ -205,6 +206,7 @@ function deleteContact() {
         if (this.status == 204) {
             requestOwnContacts()
             displayMapView()
+            resetContactInputs()
         } else {
             console.log("HTTP-status code was: " + this.status);
         }
@@ -213,34 +215,47 @@ function deleteContact() {
 }
 
 function updateContact() {
-    currentSelectedContact.firstName = document.getElementById("firstNameInputAddForm").value
-    currentSelectedContact.lastName = document.getElementById("lastNameInputAddForm").value
-    currentSelectedContact.street = document.getElementById("streetInputAddForm").value
-    currentSelectedContact.number = document.getElementById("numberInputAddForm").value
-    currentSelectedContact.zip = document.getElementById("zipInputAddForm").value
-    currentSelectedContact.city = document.getElementById("cityInputAddForm").value
-    currentSelectedContact.state = document.getElementById("stateInputAddForm").value
-    currentSelectedContact.country = document.getElementById("countryInputAddForm").value
-    currentSelectedContact.private = document.getElementById("privateCheckAddForm").checked
-    currentSelectedContact.owner = document.getElementById('ownerSelectAddForm').value
-    let httpRequest = new XMLHttpRequest();
-    let url = "http://localhost:3000/contacts/" + currentSelectedContact._id
-    httpRequest.open("PUT", url, true)
-    httpRequest.setRequestHeader("Content-Type", "application/json");
-    httpRequest.onerror = function () {
-        console.log("Connecting to server with " + url + " failed!\n");
-    };
-    httpRequest.onload = function () {
-        if (this.status == 204) {
-            requestOwnContacts()
-            displayMapView()
-        } else {
-            console.log("HTTP-status code was: " + this.status);
+    let newStreet = document.getElementById("streetInputAddForm").value
+    let newNumber = document.getElementById("numberInputAddForm").value
+    let newZip = document.getElementById("zipInputAddForm").value
+    let newCity = document.getElementById("cityInputAddForm").value
+    let validAddress = validateAddress(newStreet + " " + newNumber + " " + newZip + " " + newCity)
+    validAddress.then(function (results) {
+        currentSelectedContact.firstName = document.getElementById("firstNameInputAddForm").value
+        currentSelectedContact.lastName = document.getElementById("lastNameInputAddForm").value
+        currentSelectedContact.street = document.getElementById("streetInputAddForm").value
+        currentSelectedContact.number = document.getElementById("numberInputAddForm").value
+        currentSelectedContact.zip = document.getElementById("zipInputAddForm").value
+        currentSelectedContact.city = document.getElementById("cityInputAddForm").value
+        currentSelectedContact.state = document.getElementById("stateInputAddForm").value
+        currentSelectedContact.country = document.getElementById("countryInputAddForm").value
+        currentSelectedContact.private = document.getElementById("privateCheckAddForm").checked
+        currentSelectedContact.owner = document.getElementById('ownerSelectAddForm').value
+        let location = results.results[0].geometry.location
+        currentSelectedContact.lat = location.lat()
+        currentSelectedContact.lng = location.lng()
+        let httpRequest = new XMLHttpRequest();
+        let url = "http://localhost:3000/contacts/" + currentSelectedContact._id
+        httpRequest.open("PUT", url, true)
+        httpRequest.setRequestHeader("Content-Type", "application/json");
+        httpRequest.onerror = function () {
+            console.log("Connecting to server with " + url + " failed!\n");
+        };
+        httpRequest.onload = function () {
+            if (this.status == 204) {
+                requestOwnContacts()
+                displayMapView()
+                resetContactInputs()
+            } else {
+                console.log("HTTP-status code was: " + this.status);
+            }
         }
-    }
-    let objectToDelete = currentSelectedContact
-    delete objectToDelete._id
-    let json = JSON.stringify(objectToDelete)
-    httpRequest.send(json)
+        let objectToDelete = currentSelectedContact
+        delete objectToDelete._id
+        let json = JSON.stringify(objectToDelete)
+        httpRequest.send(json)
+    }).catch(() => {
+        alert('The given address was not valid')
+    })
 }
 

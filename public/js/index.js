@@ -60,9 +60,8 @@ function loginValidatedUser(e) {
 function displayAddContactView() {
     displayHTMLElements('changeContacts', 'saveButton')
     hideHTMLElements('mainContent', 'updateButtonUpdateForm', 'deleteButtonUpdateForm')
-
     if (loggedInUser.isAdmin) {
-        displayHTMLElements('ownerListElement')
+        displayHTMLElements('ownerListElement', 'ownerLabelAddForm', 'ownerSelectAddForm')
     } else {
         hideHTMLElements('ownerListElement')
     }
@@ -74,9 +73,8 @@ function displayAddContactView() {
 function displayChangeContactView() {
     displayHTMLElements('changeContacts', 'updateButtonUpdateForm', 'deleteButtonUpdateForm')
     hideHTMLElements('mainContent', 'saveButton')
-
     if (loggedInUser.isAdmin) {
-        displayHTMLElements('ownerListElement')
+        displayHTMLElements('ownerListElement', 'ownerLabelAddForm', 'ownerSelectAddForm')
     } else {
         hideHTMLElements('ownerListElement')
     }
@@ -108,6 +106,17 @@ function hideHTMLElements(...args) {
     args.forEach(function (elementID) {
         document.getElementById(elementID).style.display = 'none'
     });
+}
+
+function resetContactInputs() {
+    document.getElementById("firstNameInputAddForm").value = null
+    document.getElementById("lastNameInputAddForm").value = null
+    document.getElementById("streetInputAddForm").value = null
+    document.getElementById("numberInputAddForm").value = null
+    document.getElementById("zipInputAddForm").value = null
+    document.getElementById("cityInputAddForm").value = null
+    document.getElementById("stateInputAddForm").value = null
+    document.getElementById("countryInputAddForm").value = null
 }
 
 //TODO owner select
