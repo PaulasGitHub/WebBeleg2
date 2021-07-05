@@ -42,9 +42,7 @@ input {
     margin: 2px;
 }
 
-input:required{
-    border: 2px solid #b66a7b;
-}
+
 
 input:focus:required{
     border:none;
